@@ -28,8 +28,7 @@ Sample pics
 -----------
 
 Overview of today's iFlow's:
-image:: https://bitbucket.org/jasonscott/pimon-web-app-source-files/raw/ec8f3a9da9fa933d1e6e93827b79ba9e5eb0545b/readme_pics/cancel.PNG
-![Sample prettyConfirm dialog](readme_pics/iflows.PNG)
+![Sample prettyConfirm dialog](https://bitbucket.org/jasonscott/pimon-web-app-source-files/raw/17cf9e98eaad007bc866e362905020971bf9225d/readme_pics/iflows.PNG)
 
 Messages contained in the selected iFlow:
 ![Sample prettyConfirm dialog](readme_pics/messages.PNG)
