@@ -28,6 +28,7 @@ Sample pics
 -----------
 
 Overview of today's iFlow's:
+image:: https://bitbucket.org/jasonscott/pimon-web-app-source-files/raw/default/readme_pics/iflows.PNG
 ![Sample prettyConfirm dialog](readme_pics/iflows.PNG)
 
 Messages contained in the selected iFlow:
