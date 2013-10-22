@@ -1,0 +1,35 @@
+#node_modules -> lets include these for now - that way we have ALL the dependancies
+dist
+.tmp
+.sass-cache
+app/bower_components
+
+### APPLE
+.DS_Store
+.AppleDouble
+.LSOverride
+Icon
+
+
+# Thumbnails
+._*
+
+# Files that might appear on external disk
+.Spotlight-V100
+.Trashes
+
+### Windows
+# Windows image file caches
+Thumbs.db
+ehthumbs.db
+
+# Folder config file
+Desktop.ini
+
+### Editors
+*.sublime-project
+*.sublime-workspace
+
+*.tmproj
+*.tmproject
+tmtags

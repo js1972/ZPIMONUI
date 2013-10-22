@@ -1,0 +1,146 @@
+body {
+  padding-top: 50px;
+  padding-bottom: 70px;  /* for bottom navbar */
+}
+
+/* pad the heading text */
+.heading {
+  padding: 20px 15px;
+  text-align: center;
+}
+
+/* Show a hover colour over the iflows table rows */
+.table-hover tbody tr:hover td, .table-hover tbody tr:hover th {
+  background-color: #FFFFCD;
+  cursor: pointer;
+}
+
+/* remove the above table however on the pop-in rows */
+.table-hover tbody tr.row-popin:hover td {
+  background-color: #FFFFFF;
+  cursor: pointer;
+}
+/* remove the above table however on the pop-in row header (set cursor to normal) */
+.table-hover tbody tr.row-popin:hover th {
+  background-color: #FFFFFF;
+  cursor: auto;
+}
+
+/* set the selected row of the iflows table to bold when the pop-in table is showing */
+.js-iflows tr[data-js-open=true] {
+  font-weight: bold;
+}
+
+/* display the popin table with a smaller font */
+tbody > tr.row-popin > td {
+  font-size: 85%;
+}
+
+/* change standard bootstrap alert to have no margin-bottom so that it sits flush at bottom of window */
+.alert[id=my_alert] {
+  padding: 15px;
+  margin-bottom: 0;
+  border: 1px solid transparent;
+  border-radius: 10px;  /*4px;*/
+}
+
+#footer, #footerAlreadyRunning, #footerSettings, #footerMsgCancelled {
+  display: none;
+  z-index: 5000;  /*force to top - above the bootom navbar*/
+}
+
+/* Alerts */
+#js-alert-connection, #js-alert-ajax {
+  display: none;
+}
+
+.js-iflow-num {
+  /* line up the iflow number badge with vertical centre */
+  vertical-align: text-bottom;
+  line-height: 1.5;
+}
+
+
+/* PAYLOAD - LOG MODAL DIALOG */
+.pimon-payload-modal pre, .pimon-payload-modal .prettyprint {
+  border: none;
+  padding-top: 20px;
+  background-color: #ffffff;
+}
+
+#modal-tab-log-table {
+  padding-top: 20px;  
+}
+
+.status_log_table {
+  table-layout: fixed;
+  width: 100%;
+  /*display: block;
+  overflow: auto;*/
+}
+
+.status_log_table td {
+  word-wrap: break-word;
+  font-size: 85%;
+  /*white-space: pre;*/
+}
+
+.status_log_table td:first-child {
+  width: 30px;
+}
+
+.img-traffic-light {
+  width: 15px;
+  height: 15px;
+}
+
+/* Override Bootstraps modal dialog width (from 600px) */
+@media screen and (min-width: 768px) {
+  .pimon-payload-modal .modal-dialog {
+    width: 850px;
+  }
+}
+
+
+
+
+/*** -------------- chart stuff ----------------- ***/
+.stats-heading {
+  padding: 30px 15px 50px 15px;
+  text-align: center;
+}
+
+.container-canvas {
+  margin-right: auto;
+  margin-left: auto;
+  width: 800px;
+  /*position: relative;*/
+}
+
+.container-gauges {
+  margin-right: auto;
+  margin-left: auto;
+  width: 610px;
+}
+
+.js-guage {
+  width: 200px;
+  height: 160px;
+  display: inline-block;
+}
+
+.carousel-indicators > li[class=active] {
+  background-color: #949489;
+}
+
+.carousel-indicators > li {
+  border: 1px solid #949489;
+}
+
+/* carousel item*/
+.item {
+  /*color: #666;*/
+  background: #fff;
+  height: 250px;
+
+}
