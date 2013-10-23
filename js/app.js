@@ -441,16 +441,10 @@
         //remove any previous table data
         $("#msgs_container").empty();
 
-        //username: "jscott",
-        //password: "******",
         $.ajax({
             type: "GET",
             url: global.pimon_config.server + "/zpimon/api/iflows/" + timeframe,
-            //data: { "sap-client": global.pimon_config.server_client, "t": timeframe },
             dataType: "json"
-            //xhrFields: {
-            //   withCredentials: true
-            //}
         })
         .done(function(data) {
             //build table of iflows and position at msgs_container

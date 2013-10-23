@@ -5,8 +5,8 @@ body {
 
 /* pad the heading text */
 .heading {
-  padding: 20px 15px;
-  text-align: center;
+  /*padding: 20px 15px;*/
+  /*text-align: center;*/
 }
 
 /* Show a hover colour over the iflows table rows */
@@ -36,17 +36,18 @@ tbody > tr.row-popin > td {
   font-size: 85%;
 }
 
-/* change standard bootstrap alert to have no margin-bottom so that it sits flush at bottom of window */
-.alert[id=my_alert] {
-  padding: 15px;
-  margin-bottom: 0;
-  border: 1px solid transparent;
-  border-radius: 10px;  /*4px;*/
+/* iflow table font*/
+.js-iflows {
+  font-family: "Helvetica Neue", Helvetica, Arial, sans-serif;
 }
 
 #footer, #footerAlreadyRunning, #footerSettings, #footerMsgCancelled {
   display: none;
   z-index: 5000;  /*force to top - above the bootom navbar*/
+}
+
+.navbar-nav li a .glyphicon-flash {
+  color: #CCCC00;
 }
 
 /* Alerts */
@@ -94,14 +95,135 @@ tbody > tr.row-popin > td {
   height: 15px;
 }
 
-/* Override Bootstraps modal dialog width (from 600px) */
+
+/* Animate the notificaiton bell (relies on animate css: https://github.com/daneden/animate.css)*/
+/* The last parameter to the animation command is how many times to perform the animation. i.e. */
+/* 5 times or infinite times, etc.                                                              */
+.navbar-nav > li > a i.icon-bell.shake {
+  display: inline-block;
+  color: #000;
+  -webkit-animation:swing .5s 5; /*infinite;*/
+  -moz-animation:swing .5s 5; /*infinite;*/
+  -ms-animation:swing .5s 5; /*infinite;*/
+  animation:swing .5s 5; /*infinite;*/
+} 
+
+.badge.red {
+  background-color: #c95b5b;
+}
+
+
+/* TABLE SORTER OVERRIDES */
+
+/* change the table sorter header to normal font-weight and blue colour to match navbar */
+.tablesorter-bootstrap .tablesorter-header-inner {
+  color: #428bca;
+  font-weight: normal;
+  position: relative;
+  padding: 4px 18px 4px 4px;
+}
+
+/* change the in-built table sort un-sorted icon (which is back) to my own with a changed blue colour to match navbar */
+.tablesorter-bootstrap .tablesorter-headerRow .bootstrap-icon-unsorted {
+  background-image: url('data:image/png;base64,iVBORw0KGgoAAAANSUhEUgAAAAsAAAAOCAYAAAD5YeaVAAAAAXNSR0IArs4c6QAAAARnQU1BAACxjwv8YQUAAAAJcEhZcwAADsQAAA7EAZUrDhsAAAAZdEVYdFNvZnR3YXJlAEFkb2JlIEltYWdlUmVhZHlxyWU8AAABB0lEQVQoU2P4jwT+/fv3/9mzZ/+Llt8A0yA+MmBigAKgIMPt27cZeg5+Yrjw5BOYBvFB4jDACNXJcOvWLYZZ5xnACmHAQIaPIc2QgUFNTY2BkZGRAWzyq1evUBSCFIEASCPIAJA8CIAVd+3/ADcRpLA9SJEBWQNIHq4Y2doWfzkGNjY2BhAN04DiZrgjCTDgoUGMBnBoFK+4CXYzyNpCG24GGRkZhidPnjD0H/kKF++NUId4EAZAGkAKXr9+DVeILA82+evXrwx1m5+ghDGyp5t8ZRi4ubkhJoMYdZ4SGL4HOQskDpJHCTp+fn6GWg9xuAaQQhAfJA4HKCkFyPn06RM4IYFodAAAoXvICnY4caEAAAAASUVORK5CYII=');
+}
+
+
+/* BOOSTRAP OVERRIDES */
+
+/* change standard bootstrap alert to have no margin-bottom so that it sits flush at bottom of window */
+.alert[id=my_alert] {
+  padding: 15px;
+  margin-bottom: 0;
+  border: 1px solid transparent;
+  border-radius: 10px;  /*4px;*/
+}
+
+/* Override Bootstrap modal dialog width (from 600px) */
 @media screen and (min-width: 768px) {
   .pimon-payload-modal .modal-dialog {
     width: 850px;
   }
 }
 
+.navbar-fixed-top {
+  background: white;
+  border-bottom: 1px solid #e7e7e7;
+}
+/* small changes to the navbar */
+.navbar-brand {
+  padding: 3px 15px 0 15px;
+  color: black;
+}
+.navbar-brand img {
+  height: 40px;
+  width: auto;
+}
+.navbar-brand .text {
+  color: black;
+  display: inline-block;
+  height: 28px;
+  padding-top: 22px;
+  font-size: 20px;
+}
+.navbar-nav > .open > a,
+.navbar-nav > .open > a:hover,
+.navbar-nav > .open > a:focus,
+.navbar-nav > .active > a,
+.navbar-nav > .active > a:hover,
+.navbar-nav > .active > a:focus {
+  color: black;
+  background: white;
+}
+.navbar-nav > li:hover {
+  color: black;
+  background: white;
+}
+.navbar-nav > li {
+  border-right: 1px solid white;
+  border-left: 1px solid #e7e7e7;
+}
+.navbar-nav > li:last-child {
+  border-right: 1px solid #e7e7e7;
+}
+.navbar-right > li:nth-child(3) {
+  border-right: 1px solid #e7e7e7;
+}
+.navbar-toggle {
+  background-color: #f8f8f8;
+  -webkit-border-radius: 2;
+  -webkit-background-clip: padding-box;
+  -moz-border-radius: 2;
+  -moz-background-clip: padding;
+  border-radius: 2;
+  background-clip: padding-box;
+  border: 1px solid #dfdfdf;
+  border-bottom: 4px solid #dfdfdf;
+  border-right: 4px solid #dfdfdf;
+}
+.navbar-toggle .icon-bar {
+  background-color: #acacac;
+}
+.navbar-toggle:hover {
+  background-color: #dfdfdf;
+  border: 1px solid #acacac;
+  border-bottom: 4px solid #acacac;
+  border-right: 4px solid #acacac;
+}
+.navbar-toggle:hover .icon-bar {
+  background-color: black;
+}
 
+/* headings */
+h1,
+h1 small {
+  display: inline-block;
+  margin-top:10px;
+  margin-bottom: 15px;
+  font-weight: 100;
+  letter-spacing: 0.04em;
+  text-transform: uppercase;
+}
 
 
 /*** -------------- chart stuff ----------------- ***/

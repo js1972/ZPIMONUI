@@ -10,6 +10,8 @@
     <!-- http://fortawesome.github.io/Font-Awesome/get-started - req'd for up/down arrows in tablesorter -->
     <!-- Font Awesome does not seem to work properly when using their minimised css - the chevron icons
          do not show -->
+    <!-- https://github.com/daneden/animate.css -->
+
     <!-- HTML5 shim and Respond.js IE8 support of HTML5 elements and media queries -->
     <!--[if lt IE 9]>
       <script src="../../assets/js/html5shiv.js"></script>
@@ -23,11 +25,12 @@
     <link rel="stylesheet" href="css/bootstrap-select.min.css">
     <link rel="stylesheet" href="css/theme.bootstrap.css">
     <link rel='stylesheet' href="css/prettify.css">
+    <link rel="stylesheet" href="css/animate.css">
     <!-- endbuild -->
   </head>
   <body>
     <!-- NAVBAR -->
-    <div class="navbar navbar-inverse navbar-fixed-top">
+    <div class="navbar navbar-fixed-top">  <!-- navbar-inverse -->
       <div class="container-fluid">
         <div class="navbar-header">
           <button type="button" class="navbar-toggle" data-toggle="collapse" data-target=".navbar-collapse">
@@ -35,14 +38,14 @@
             <span class="icon-bar"></span>
             <span class="icon-bar"></span>
           </button>
-          <a class="navbar-brand" href="#">interface monitor</a>
+          <a class="navbar-brand" href="#"><img src="img/owl-blue-brown.png" alt="brand name here"></a>
         </div>
         <div class="collapse navbar-collapse">
           <ul class="nav navbar-nav">
-            <li><a href="#" id="pi_std_monitor">open java msg monitor</a></li>
-            <li><a href="#" id="pi_sxmb_moni">open sap msg monitor</a></li>
+            <li><a href="#" id="pi_std_monitor">pi java <span class="glyphicon glyphicon-list-alt"></span></a></li>
+            <li><a href="#" id="pi_sxmb_moni">erp <span class="glyphicon glyphicon-list-alt"></span></a></li>
             <li><a href="stats.html"><span class="glyphicon glyphicon-stats"></span></a></li>
-            <li><a href="#" id="clear_cache_link">update <span class="glyphicon glyphicon-flash"></span></a></li>
+            <li><a href="#" id="clear_cache_link" data-toggle="tooltip" title="immediate update of pimon with data from pi server">update <span class="glyphicon glyphicon-flash"></span></a></li>
           </ul> <!-- !! USING LINKS INSTEAD OF BUTTONS NOW FOR CLEANER FLAT LOOK !!
           <form class="navbar-form navbar-right">
             <button type="button" id="refresh_btn" class="btn btn-default">
@@ -68,7 +71,7 @@
               </ul>
             </li>
             <li>
-              <a id="refresh_btn">
+              <a id="refresh_btn" href="#">
                 <span class="glyphicon glyphicon-refresh"></span> refresh
               </a> <!--
               <button type="button" id="refresh_btn" class="btn btn-default">
@@ -76,7 +79,7 @@
               </button> -->
             </li>
             <li>
-              <a id="refresh_btn" class="js-settings-btn">
+              <a href="#" class="js-settings-btn">
                 <span class="glyphicon glyphicon-wrench"></span>
               </a>
               <!--
@@ -93,8 +96,7 @@
     <div class="container-fluid col-lg-12">  <!-- Take up the full screen with a small margin -->
 
       <div class="heading">
-        <h1>Interface Monitor</h1>
-        <!-- <p class="lead">Use this document as a way to quickly start any new project.<br> All you get is this text and a mostly barebones HTML document.</p> -->
+        <h1>pimon</h1>
       </div>
 
       <select class="selectpicker">
@@ -136,7 +138,7 @@
         </p>
       </div> <!-- /Alert for AJAX error --> <!-- /BANNER ALERTS -->
 
-      <!-- Container for messages table -->
+      <!-- Container for MESSAGES TABLE -->
       <div id="msgs_container" class="table-responsive"></div>
 
       <!-- MODAL PAYLOAD -->
