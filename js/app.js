@@ -83,20 +83,20 @@
         global.pimon_config.server_client = global.localStorage.server_client || "030";
         global.pimon_config.erp_server = global.localStorage.erp_server || "http://app-saperd.inpex.com.au:8002";
 
-        if (global.pimon_config.server === "" || global.pimon_config.server_client === "") {
+        if (global.pimon_config.server === "") {
             $("#js-alert-connection").show(500);
         }
     }
 
     /* Save the settings modal dialog value into localStorage */
-    function saveSettings(server, server_client, pi_server) {
+    function saveSettings(server, server_client, erp_server) {
         global.pimon_config.server = server;
         global.pimon_config.server_client = server_client;
-        global.pimon_config.pi_server = pi_server;
+        global.pimon_config.erp_server = erp_server;
 
         global.localStorage.server = server;
         global.localStorage.server_client = server_client;
-        global.localStorage.pi_server = pi_server;
+        global.localStorage.erp_server = erp_server;
     }
 
     function updateNavbarNotifications() {
@@ -602,12 +602,12 @@
             $("#myModalSettings").modal();
             $("#myModalSettings #serverSetting").val(global.pimon_config.server); //pre-populate current value
             $("#myModalSettings #serverClientSetting").val(global.pimon_config.server_client);
-            $("#myModalSettings #serverPISetting").val(global.pimon_config.pi_server); //pre-populate current value
+            $("#myModalSettings #serverERPSetting").val(global.pimon_config.erp_server); //pre-populate current value
         });
 
         /* Handle the settings modal dialog SAVE button */
         $("#myModalSettings .modal-footer button").click(function() {
-            saveSettings($("#myModalSettings #serverSetting").val(), $("#myModalSettings #serverClientSetting").val(), $("#myModalSettings #serverPISetting").val());
+            saveSettings($("#myModalSettings #serverSetting").val(), $("#myModalSettings #serverClientSetting").val(), $("#myModalSettings #serverERPSetting").val());
             $("#footerSettings").show(100).delay(2000).hide(100);
         });
     });
