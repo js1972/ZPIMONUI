@@ -81,7 +81,7 @@
     function readServerSettings() {
         global.pimon_config.server = global.localStorage.server || "http://app1poy.inpex.com.au:58000";  //with default as POY
         global.pimon_config.server_client = global.localStorage.server_client || "030";
-        global.pimon_config.pi_server = global.localStorage.pi_server || "http://app1pod.inpex.com.au:58200";
+        global.pimon_config.erp_server = global.localStorage.erp_server || "http://app-saperd.inpex.com.au:8002";
 
         if (global.pimon_config.server === "" || global.pimon_config.server_client === "") {
             $("#js-alert-connection").show(500);
@@ -97,6 +97,25 @@
         global.localStorage.server = server;
         global.localStorage.server_client = server_client;
         global.localStorage.pi_server = pi_server;
+    }
+
+    function updateNavbarNotifications() {
+        $.ajax({
+            type: "GET",
+            url: global.pimon_config.server + "/zpimon/api/stats/monthly",
+            dataType: "json"
+        })
+        .done(function(data) {
+           $(".pimon-error-num").text(data.iflowOutstandingErrors);
+
+           $(".pimon-notifications li :not(.dropdown-header)").remove();
+           $(".pimon-notifications").append(
+                $("<li></li>").append("<a href='javascript:;' tabindex='-1' role='menuitem'>View outstanding errors</a>")
+            );
+        })
+        .fail(function(jqXHR, textStatus, errorThrown) {
+            console.log("Error reading error stats (rest call: /zpimon/api/stats/monthly): " + errorThrown);
+        });
     }
 
     /*
@@ -522,6 +541,8 @@
             });
 
             $(".js-iflow-num").text(data.length);
+
+            updateNavbarNotifications();
         })
         .fail(function(jqXHR, textStatus) {
             $("#js-alert-ajax-text").text(textStatus + " : " + jqXHR.status);
@@ -536,7 +557,7 @@
         global.pimon_config = {
             server: "",
             server_client: "",
-            pi_server: ""
+            erp_server: ""
         };
 
         /* Hide any alerts when their cancel button is clicked */
@@ -568,10 +589,10 @@
         Chrome plugin.
         */
         //The java message monitor does dodgy stuff with cross frame calls - so we get CORS issues listed in the console here... Still works though.
-        $("#pi_std_monitor").attr("href", global.pimon_config.pi_server + "/webdynpro/resources/sap.com/tc~lm~itsam~ui~mainframe~wd/FloorPlanApp?applicationID=com.sap.itsam.mon.xi.msg");
+        $("#pi_std_monitor").attr("href", global.pimon_config.server + "/webdynpro/resources/sap.com/tc~lm~itsam~ui~mainframe~wd/FloorPlanApp?applicationID=com.sap.itsam.mon.xi.msg");
         $("#pi_std_monitor").attr("target", "_blank");
 
-        $("#pi_sxmb_moni").attr("href", global.pimon_config.server + "/sap/bc/gui/sap/its/webgui?~transaction=sxmb_moni&sap-language=EN&sap-client=" + global.pimon_config.server_client);
+        $("#pi_sxmb_moni").attr("href", global.pimon_config.erp_server + "/sap/bc/gui/sap/its/webgui?~transaction=sxmb_moni&sap-language=EN&sap-client=" + global.pimon_config.server_client);
         $("#pi_sxmb_moni").attr("target", "_blank");
 
         /* Handle the settings button by opening the settings modal dialog */

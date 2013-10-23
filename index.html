@@ -41,18 +41,50 @@
           <ul class="nav navbar-nav">
             <li><a href="#" id="pi_std_monitor">open java msg monitor</a></li>
             <li><a href="#" id="pi_sxmb_moni">open sap msg monitor</a></li>
-            <li><a href="stats.html">stats</a></li>
-            <li><a href="#" id="clear_cache_link">update message cache <span class="glyphicon glyphicon-flash"></span></a></li>
-          </ul>
+            <li><a href="stats.html"><span class="glyphicon glyphicon-stats"></span></a></li>
+            <li><a href="#" id="clear_cache_link">update <span class="glyphicon glyphicon-flash"></span></a></li>
+          </ul> <!-- !! USING LINKS INSTEAD OF BUTTONS NOW FOR CLEANER FLAT LOOK !!
           <form class="navbar-form navbar-right">
-            <!-- <button type="button" class="btn btn-link">Clear cache</button> -->
             <button type="button" id="refresh_btn" class="btn btn-default">
               <span class="glyphicon glyphicon-refresh"></span> refresh
             </button>
             <button type="button" class="btn btn-default js-settings-btn">
               <span class="glyphicon glyphicon-wrench"></span>
             </button>
-          </form>
+          </form> -->
+          <ul class="nav navbar-nav navbar-right">
+            <li class="dropdown">
+              <a href="#" class="dropdown-toggle" data-toggle="dropdown">
+                <i class="icon-bell shake"></i>
+                <span class="badge red pimon-error-num">0</span>
+              </a>
+              <ul class="dropdown-menu pimon-notifications" role="menu">
+                <li class="dropdown-header">
+                  <i class="icon-bell"></i> Notifications
+                </li>
+                <li>
+                  <a href="javascript:;" tabindex="-1" role="menuitem">You have no notifications.</a>
+                </li>
+              </ul>
+            </li>
+            <li>
+              <a id="refresh_btn">
+                <span class="glyphicon glyphicon-refresh"></span> refresh
+              </a> <!--
+              <button type="button" id="refresh_btn" class="btn btn-default">
+                <span class="glyphicon glyphicon-refresh"></span> refresh
+              </button> -->
+            </li>
+            <li>
+              <a id="refresh_btn" class="js-settings-btn">
+                <span class="glyphicon glyphicon-wrench"></span>
+              </a>
+              <!--
+              <button type="button" class="btn btn-default js-settings-btn">
+                <span class="glyphicon glyphicon-wrench"></span>
+              </button> -->
+            </li>
+          </ul>
         </div><!--/.nav-collapse -->
       </div>
     </div>
