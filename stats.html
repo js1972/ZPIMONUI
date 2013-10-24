@@ -43,116 +43,159 @@
     <!--
     First wrap the page in container-fluid for responsiveness. Then setup 3 columns with the middle one containing our content!
     -->
-    <div class="container-fluid">
-    <div class="row">
-    <div class="col-lg-2"></div>
-    <div class="col-lg-8">
+    <div class="container-fluid col-lg-12">
 
-    <!-- <div class="container-fluid"> -->  <!-- Take up the full screen with a small margin -->
-
-      <div class="stats-heading">
-        <h1>Interface Statistics</h1>
-      </div>
-
-      <!-- CAROUSEL -->
-      <div id="pimon-carousel" class="carousel slide" data-interval="false">
-        <!-- Indicators -->
-        <ol class="carousel-indicators">
-          <li data-target="#pimon-carousel" data-slide-to="0" class="active"></li>
-          <li data-target="#pimon-carousel" data-slide-to="1"></li>
-        </ol>
-        <!-- Wrapper for slides -->
-        <div class="carousel-inner">
-          <div class="item active">
-            <div class="container-gauges">
-              <div id="gaugeIflowPerDay" class="js-guage"></div>
-              <div id="gaugeIflowErrorsPerDay" class="js-guage"></div>
-              <div id="gaugeIflowOutstandingErrorsPerDay" class="js-guage"></div>
+      <div class="row">
+        <div class="col-lg-8">
+          <div class="container-fluid">
+            <div class="stats-heading">
+              <h1>pimon statistics</h1>
             </div>
           </div>
-          <div class="item">
-            <div class="container-gauges">
-            <div id="gaugeMessagePerDay" class="js-guage"></div>
-            <div id="gaugeMessageErrorsPerDay" class="js-guage"></div>
-            <div id="gaugeMessageOutstandingErrorsPerDay" class="js-guage"></div>
-          </div>
-          </div>
         </div>
-        <!-- Controls -->
-        <a class="left carousel-control" href="#pimon-carousel" data-slide="prev">
-          <span class="glyphicon glyphicon-chevron-left"></span>
-        </a>
-        <a class="right carousel-control" href="#pimon-carousel" data-slide="next">
-          <span class="glyphicon glyphicon-chevron-right"></span>
-        </a>
-      </div>
+      </div> <!-- end of row 1 -->
 
-      <!-- TABS -->
-      <!--
-      <ul class="nav nav-tabs">
-        <li class="active"><a href="#tab-iflow-guages" data-toggle="tab">iFlows</a></li>
-        <li><a href="#tab-message-guages" data-toggle="tab">Messages</a></li>
-      </ul>
-      <div class="tab-content">
-        <div class="tab-pane active" id="tab-iflow-guages">
-          <!-- tab content --> <!--
-          <div class="container-gauges">
-            <div id="gaugeIflowPerDay" class="js-guage"></div>
-            <div id="gaugeIflowErrorsPerDay" class="js-guage"></div>
-            <div id="gaugeIflowOutstandingErrorsPerDay" class="js-guage"></div>
+      <div class="row">
+        <div class="col-sm-3">
+          <!-- Top 5 interfaces box -->
+          <div class="box">
+            <div class="icon blue">
+              <!--<i class="icon-user"></i>-->
+              <span class="glyphicon glyphicon-stats"></span>
+            </div>
+            <div class="content-right">
+              <div class="title blue">Top messages<br/>No.1</div>
+              <div class="smallvalue">ERP_PurOrderNotification_V01</div>
+              <div class="title blue">No .2</div>
+              <div class="smallvalue">ProCon_PurgContractMaint_V01</div>
+              <div class="title blue">No .3</div>
+              <div class="smallvalue">ERP_GdsMovementNotification_V01</div>
+              <div class="title blue">No .4</div>
+              <div class="smallvalue">PersonnelDetails_SAP_to_IAM</div>
+              <div class="title blue">No .5</div>
+              <div class="smallvalue">ERP_InvoiceNotification_V01</div>
+              <br />
+            </div>
+          </div> <!-- end of box -->
+
+          <!-- Eror report (for all time) -->
+          <div class="box">
+            <div class="icon red">
+              <!--<i class="icon-exclamation-sign"></i>-->
+              <span class="glyphicon glyphicon-exclamation-sign"></span>
+            </div>
+            <div class="content-right">
+              <div class="title red">Message in Error</div>
+              <div class="value pimon-error-alltime"></div>
+              <div class="title orange">Delivering</div>
+              <div class="value pimon-delivering-alltime"></div>
+              <div class="title black">Blacklisted</div>
+              <div class="smallvalue pimon-blacklisted-alltime"></div>
+              <br /><br />
+            </div>
+          </div>  <!-- end of box -->
+
+        </div> <!-- end of col-sm-3 -->
+
+        <div class="col-sm-8">
+          <div class="row">
+
+            <!-- CAROUSEL -->
+            <!--
+            <div id="pimon-carousel" class="carousel slide" data-interval="false">
+            -->
+              <!-- Indicators -->
+              <!--
+              <ol class="carousel-indicators">
+                <li data-target="#pimon-carousel" data-slide-to="0" class="active"></li>
+                <li data-target="#pimon-carousel" data-slide-to="1"></li>
+              </ol>
+            -->
+              <!-- Wrapper for slides -->
+              <!--
+              <div class="carousel-inner">
+                <div class="item active">
+                  <div class="container-gauges">
+                    <div id="gaugeIflowPerDay" class="js-guage"></div>
+                    <div id="gaugeIflowErrorsPerDay" class="js-guage"></div>
+                    <div id="gaugeIflowOutstandingErrorsPerDay" class="js-guage"></div>
+                  </div>
+                </div>
+                <div class="item">
+                  <div class="container-gauges">
+                    <div id="gaugeMessagePerDay" class="js-guage"></div>
+                    <div id="gaugeMessageErrorsPerDay" class="js-guage"></div>
+                    <div id="gaugeMessageOutstandingErrorsPerDay" class="js-guage"></div>
+                  </div>
+                </div>
+              </div>
+            -->
+              <!-- Controls -->
+              <!--
+              <a class="left carousel-control" href="#pimon-carousel" data-slide="prev">
+                <span class="glyphicon glyphicon-chevron-left"></span>
+              </a>
+              <a class="right carousel-control" href="#pimon-carousel" data-slide="next">
+                <span class="glyphicon glyphicon-chevron-right"></span>
+              </a>
+            </div> --> <!-- end of pimon-carousel -->
+
+
+            <!-- TABS -->
+            <ul class="nav nav-tabs pimon-tab-panel">
+              <li class="active"><a href="#tab-iflow-guages" data-toggle="tab">iFlows</a></li>
+              <li><a href="#tab-message-guages" data-toggle="tab">Messages</a></li>
+            </ul>
+            <div class="tab-content pimon-gauges">
+              <div class="tab-pane active" id="tab-iflow-guages">
+              <!-- tab content -->
+              <div class="container-gauges">
+                <div id="gaugeIflowPerDay" class="js-guage"></div>
+                <div id="gaugeIflowErrorsPerDay" class="js-guage"></div>
+                <div id="gaugeIflowOutstandingErrorsPerDay" class="js-guage"></div>
+              </div>
+            </div>
+            <div class="tab-pane" id="tab-message-guages">
+              <!-- tab content -->
+              <div class="container-gauges">
+                <div id="gaugeMessagePerDay" class="js-guage"></div>
+                <div id="gaugeMessageErrorsPerDay" class="js-guage"></div>
+                <div id="gaugeMessageOutstandingErrorsPerDay" class="js-guage"></div>
+              </div>
+            </div>
+
+
+
+          </div> <!-- end of row -->
+
+          <div class="row">
+            <div class="col-sm-12">
+              <div class="page-header">
+                <h3>Chart:</h3>
+              </div>
+            </div>
           </div>
-        </div>
-        <div class="tab-pane" id="tab-message-guages">
-          <!-- tab content -->  <!--
-          <div class="container-gauges">
-            <div id="gaugeMessagePerDay" class="js-guage"></div>
-            <div id="gaugeMessageErrorsPerDay" class="js-guage"></div>
-            <div id="gaugeMessageOutstandingErrorsPerDay" class="js-guage"></div>
-          </div>
-        </div>
-      </div>
-    -->
-
-<!--
-      <div class="container-gauges">
-        <table>
-          <tr>
-            <td><div id="gauge1" class="js-guage"></div></td>
-            <td><div id="gauge2" class="js-guage"></div></td>
-            <td><div id="gauge3" class="js-guage"></div></td>
-          </tr>
-        </table>
-      </div>
--->
-
-      <p>&nbsp;</p><p>&nbsp;</p><p>&nbsp;</p>
-
-      <!-- Chart go here... -->
-      <div class="container-canvas">
-        <canvas id="msgPerDayCanvas" class="container-fluid" width="800" height="400"></canvas>
-      </div>
-
-    </div>
-    <div class="col-lg-2"></div>
-    </div><!-- /.container -->
-    </div><!-- /.row -->
+          <div class="pimon-chart"></div>
+        </div> <!-- end of col-sm-8 -->
+      </div> <!-- end of row 2 -->
+    </div> <!-- end of container col-lg-12 -->
 
     <!-- build:js js/pimonstats.js -->
     <script src="js/jquery-2.0.3.js"></script>
     <script src="js/bootstrap.js"></script>
-    <script src="js/Chart.min.js"></script>
-
+    <!--<script src="js/Chart.min.js"></script>-->
+    <!-- BlockUI jquery plugin: http://jquery.malsup.com/block/#overview : used for ajax waiting.
+         Allows for user input blocking while still performing async ajax! -->
+    <script src="js/jquery.blockUI.js"></script>
     <!-- Just Gage : http://justgage.com/ -->
     <script src="js/raphael.2.1.0.min.js"></script>
     <script src="js/justgage.js"></script>
-
-    <!--<script src="http://d3js.org/d3.v3.js" charset="utf-8"></script>-->
-
+    <script src="js/jquery.flot.js"></script>
+    <script src="js/jquery.flot.resize.js"></script>
+    <script src="js/ResizeSensor.js"></script>
+    <script src="js/ElementQueries.js"></script>
     <!-- main app js -->
-    <script type="text/javascript" src="js/stats.js"></script>
-    <!-- BlockUI jquery plugin: http://jquery.malsup.com/block/#overview : used for ajax waiting.
-         Allows for user input blocking while still performing async ajax! -->
-    <script type="text/javascript" src="js/jquery.blockUI.js"></script>
+    <script src="js/stats.js"></script>
     <!-- endbuild -->
   </body>
 </html>

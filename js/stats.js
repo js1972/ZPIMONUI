@@ -1,4 +1,4 @@
-(function(global, JustGage, Chart) {
+(function(global, JustGage) {
     'use strict';
 
     /*
@@ -7,9 +7,9 @@
     function readServerSettings() {
         global.pimon_config.server = global.localStorage.server || "http://app1poy.inpex.com.au:58000";  //with default as POY
         global.pimon_config.server_client = global.localStorage.server_client || "030";
-        global.pimon_config.pi_server = global.localStorage.pi_server || "http://app1pod.inpex.com.au:58200";
+        global.pimon_config.erp_server = global.localStorage.erp_server || "http://app-saperd.inpex.com.au:8002";
 
-        if (global.pimon_config.server === "" || global.pimon_config.server_client === "") {
+        if (global.pimon_config.server === "") {
             $("#js-alert-connection").show(500);
         }
     }
@@ -21,11 +21,7 @@
         $.ajax({
             type: "GET",
             url: global.pimon_config.server + "/zpimon/api/stats/monthly",
-            //data: { "sap-client": global.pimon_config.server_client },
             dataType: "json"
-            //xhrFields: {
-            //    withCredentials: true
-            //}
         })
         .done(function(data) {
             global.gaugeIflowPerDay.refresh((data.iflowPerDay === undefined)? 0 : data.iflowPerDay);
@@ -37,12 +33,27 @@
             global.gaugeMessageOutstandingErrorsPerDay.refresh((data.messageOutstandingErrors === undefined)? 0 : data.messageOutstandingErrors);
 
             $.unblockUI();
+
+            //update the page block elements
+            $(".pimon-error-alltime").text((data.errorsAllTime === undefined)? "" : data.errorsAllTime);
+            $(".pimon-delivering-alltime").text((data.deliveringAllTime === undefined)? "" : data.deliveringAllTime);
+            //var words = $("<wbr></wbr>");
+            //words.text("not implemented");
+            //$(".pimon-blacklisted-alltime").html(words);
+            $(".pimon-blacklisted-alltime").text("not implemented");
         })
         .fail(function(jqXHR, textStatus, errorThrown) {
             $("#js-alert-ajax-text").text(errorThrown);
             $("#js-alert-ajax").show(500);
             $.unblockUI();
         });
+    }
+
+    function resized() {
+        $('.pimon-tab-panel a[href="#tab-message-guages"]').tab('show'); // Select tab by name
+        setTimeout(function() {
+            $('.pimon-tab-panel a[href="#tab-iflow-guages"]').tab('show'); // Select tab by name
+        }, 10);
     }
 
     /*
@@ -52,7 +63,7 @@
         global.pimon_config = {
             server: "",
             server_client: "",
-            pi_server: ""
+            erp_server: ""
         };
         readServerSettings();
 
@@ -63,7 +74,8 @@
         getStats();
 
         /* Add the guages to the global window object so we can access them anywhere. don't know
-           if this is the best way - Surely there is a nice asynchronous way... */
+           if this is the best way - Surely there is a nice asynchronous way... 
+        */
         global.gaugeIflowPerDay = new JustGage({
             id: "gaugeIflowPerDay",
             value: 0,
@@ -72,7 +84,8 @@
             showMinMax: false,
             refreshAnimationType: "bounce",
             levelColors: ["#00CC00"],
-            title: "iFlows / Day"
+            title: "iFlows / Day",
+            relativeGaugeSize: true
         });
         global.gaugeIflowErrorsPerDay = new JustGage({
             id: "gaugeIflowErrorsPerDay",
@@ -83,7 +96,8 @@
             refreshAnimationType: "bounce",
             levelColors: ["#FFFF66", "#FF0000"],
             levelColorsGradient: false,
-            title: "iFlow Errors / Day"
+            title: "iFlow Errors / Day",
+            relativeGaugeSize: true
         });
         global.gaugeIflowOutstandingErrorsPerDay = new JustGage({
             id: "gaugeIflowOutstandingErrorsPerDay",
@@ -93,7 +107,8 @@
             showMinMax: false,
             refreshAnimationType: "bounce",
             levelColors: ["#FF0000"],
-            title: "iFlow Current Errors"
+            title: "iFlow Current Errors",
+            relativeGaugeSize: true
         });
 
         global.gaugeMessagePerDay = new JustGage({
@@ -104,7 +119,8 @@
             showMinMax: false,
             refreshAnimationType: "bounce",
             levelColors: ["#00CC00"],
-            title: "Messages / Day"
+            title: "Messages / Day",
+            relativeGaugeSize: true
         });
         global.gaugeMessageErrorsPerDay = new JustGage({
             id: "gaugeMessageErrorsPerDay",
@@ -115,7 +131,8 @@
             refreshAnimationType: "bounce",
             levelColors: ["#FFFF66", "#FF0000"],
             levelColorsGradient: false,
-            title: "Errors / Day"
+            title: "Errors / Day",
+            relativeGaugeSize: true
         });
         global.gaugeMessageOutstandingErrorsPerDay = new JustGage({
             id: "gaugeMessageOutstandingErrorsPerDay",
@@ -125,8 +142,38 @@
             showMinMax: false,
             refreshAnimationType: "bounce",
             levelColors: ["#FF0000"],
-            title: "Current Errors"
+            title: "Current Errors",
+            relativeGaugeSize: true
         });
+
+
+        var timer = false;
+        new ResizeSensor($(".pimon-gauges"), function() {
+            if ($(".pimon-gauges").width() < 680) {
+                $(".js-guage").width("150px");
+                $(".js-guage").height("120px");
+                $(".container-gauges").removeClass("container-gauges").addClass("container-gauges-small");  //width("460px");
+                //$(".js-guage").css('display', 'block');
+                //$(".js-guage").css('display', 'inline-block');
+                //$("#tab-iflow-guages").css("display", "block");
+                if (timer !== false) {
+                    clearTimeout(timer);
+                }
+                timer = setTimeout(resized, 1000);
+            } else {
+                $(".js-guage").width("200px");
+                $(".js-guage").height("160px");
+                $(".container-gauges-small").removeClass("container-gauges-small").addClass("container-gauges"); //width("610px");
+                //$(".js-guage").css('display', 'block');
+                //$(".js-guage").css('display', 'inline-block');
+                //$("#tab-iflow-guages").css("display", "block");
+                if (timer !== false) {
+                    clearTimeout(timer);
+                }
+                timer = setTimeout(resized, 300);
+            }
+        });
+
 
         setInterval(function() {
             getStats();
@@ -139,27 +186,16 @@
         });
 
 
-        /* Charts.js*/
-        var lineChartData = {
-            labels : ["January","February","March","April","May","June","July"],
-            datasets : [
-                {
-                    fillColor : "rgba(220,220,220,0.5)",
-                    strokeColor : "rgba(220,220,220,1)",
-                    pointColor : "rgba(220,220,220,1)",
-                    pointStrokeColor : "#fff",
-                    data : [65,59,90,81,56,55,40]
-                },
-                {
-                    fillColor : "rgba(151,187,205,0.5)",
-                    strokeColor : "rgba(151,187,205,1)",
-                    pointColor : "rgba(151,187,205,1)",
-                    pointStrokeColor : "#fff",
-                    data : [28,48,40,19,96,27,100]
-                }
-            ]
-        };
 
-        var myLine = new Chart(document.getElementById("msgPerDayCanvas").getContext("2d")).Line(lineChartData);
+        var d1 = [];
+        for (var i = 0; i < 14; i += 0.5) {
+            d1.push([i, Math.sin(i)]);
+        }
+
+        var d2 = [[0, 3], [4, 8], [8, 5], [9, 13]];
+        var d3 = [[0, 12], [7, 12], null, [7, 2.5], [12, 2.5]];
+
+        var placeholder = $(".pimon-chart");
+        var plot = $.plot(placeholder, [d1, d2, d3]);
     });
-})(this, this.JustGage, this.Chart);
+})(this, this.JustGage);
