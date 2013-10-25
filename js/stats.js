@@ -8,9 +8,18 @@
         global.pimon_config.server = global.localStorage.server || "http://app1poy.inpex.com.au:58000";  //with default as POY
         global.pimon_config.server_client = global.localStorage.server_client || "030";
         global.pimon_config.erp_server = global.localStorage.erp_server || "http://app-saperd.inpex.com.au:8002";
-
+        global.pimon_config.dev_user = global.localStorage.dev_user || "";
+        global.pimon_config.dev_pass = global.localStorage.dev_pass || "";
+        
         if (global.pimon_config.server === "") {
             $("#js-alert-connection").show(500);
+        }
+    }
+
+    function ajaxBeforeSend(xhr) {
+        if (global.location.href.indexOf("localhost") > -1) {
+            xhr.setRequestHeader("Authorization", "Basic " + btoa(global.pimon_config.dev_user + ":" + global.pimon_config.dev_pass));
+            xhr.withCredentials = true;
         }
     }
 
@@ -21,7 +30,10 @@
         $.ajax({
             type: "GET",
             url: global.pimon_config.server + "/zpimon/api/stats/monthly",
-            dataType: "json"
+            dataType: "json",
+            beforeSend: function(xhr) {
+                ajaxBeforeSend(xhr);
+            }
         })
         .done(function(data) {
             global.gaugeIflowPerDay.refresh((data.iflowPerDay === undefined)? 0 : data.iflowPerDay);
@@ -49,6 +61,28 @@
         });
     }
 
+    function createGauge(id, title) {
+        return new JustGage({
+            id: id,
+            value: 0,
+            min: 0,
+            max: 100,
+            showMinMax: false,
+            refreshAnimationType: "bounce",
+            levelColors: ["#00CC00"],
+            title: title,
+            relativeGaugeSize: true
+        });
+    }
+
+    /*
+    This function is called at the end of window re-sizing (actually at the end of the 
+    pimon-gauges div resizing).
+    There is a strange bug that causes the guages graphic not to draw after a resize - 
+    but only due to the gauges residing inside a bootstrap tab pane (or carousel) - and
+    only after that tabs have been clicked!
+    To get around this we use a timer to make it async and quickly click the tabs.
+    */
     function resized() {
         $('.pimon-tab-panel a[href="#tab-message-guages"]').tab('show'); // Select tab by name
         setTimeout(function() {
@@ -73,89 +107,28 @@
         */
         getStats();
 
-        /* Add the guages to the global window object so we can access them anywhere. don't know
-           if this is the best way - Surely there is a nice asynchronous way... 
-        */
-        global.gaugeIflowPerDay = new JustGage({
-            id: "gaugeIflowPerDay",
-            value: 0,
-            min: 0,
-            max: 100,
-            showMinMax: false,
-            refreshAnimationType: "bounce",
-            levelColors: ["#00CC00"],
-            title: "iFlows / Day",
-            relativeGaugeSize: true
-        });
-        global.gaugeIflowErrorsPerDay = new JustGage({
-            id: "gaugeIflowErrorsPerDay",
-            value: 0,
-            min: 0,
-            max: 100,
-            showMinMax: false,
-            refreshAnimationType: "bounce",
-            levelColors: ["#FFFF66", "#FF0000"],
-            levelColorsGradient: false,
-            title: "iFlow Errors / Day",
-            relativeGaugeSize: true
-        });
-        global.gaugeIflowOutstandingErrorsPerDay = new JustGage({
-            id: "gaugeIflowOutstandingErrorsPerDay",
-            value: 0,
-            min: 0,
-            max: 100,
-            showMinMax: false,
-            refreshAnimationType: "bounce",
-            levelColors: ["#FF0000"],
-            title: "iFlow Current Errors",
-            relativeGaugeSize: true
-        });
+        // Add the guages to the global window object so we can access them anywhere. Don't know
+        // if this is the best way - Surely there is a nice asynchronous way... 
+        global.gaugeIflowPerDay = createGauge("gaugeIflowPerDay", "iFlows / Day");
+        global.gaugeIflowErrorsPerDay = createGauge("gaugeIflowErrorsPerDay", "iFlow Errors / Day");
+        global.gaugeIflowOutstandingErrorsPerDay = createGauge("gaugeIflowOutstandingErrorsPerDay", "iFlow Current Errors");
+        global.gaugeMessagePerDay = createGauge("gaugeMessagePerDay", "Messages / Day");
+        global.gaugeMessageErrorsPerDay = createGauge("gaugeMessageErrorsPerDay", "Errors / Day");
+        global.gaugeMessageOutstandingErrorsPerDay = createGauge("gaugeMessageOutstandingErrorsPerDay", "Current Errors");
 
-        global.gaugeMessagePerDay = new JustGage({
-            id: "gaugeMessagePerDay",
-            value: 0,
-            min: 0,
-            max: 100,
-            showMinMax: false,
-            refreshAnimationType: "bounce",
-            levelColors: ["#00CC00"],
-            title: "Messages / Day",
-            relativeGaugeSize: true
-        });
-        global.gaugeMessageErrorsPerDay = new JustGage({
-            id: "gaugeMessageErrorsPerDay",
-            value: 0,
-            min: 0,
-            max: 100,
-            showMinMax: false,
-            refreshAnimationType: "bounce",
-            levelColors: ["#FFFF66", "#FF0000"],
-            levelColorsGradient: false,
-            title: "Errors / Day",
-            relativeGaugeSize: true
-        });
-        global.gaugeMessageOutstandingErrorsPerDay = new JustGage({
-            id: "gaugeMessageOutstandingErrorsPerDay",
-            value: 0,
-            min: 0,
-            max: 100,
-            showMinMax: false,
-            refreshAnimationType: "bounce",
-            levelColors: ["#FF0000"],
-            title: "Current Errors",
-            relativeGaugeSize: true
-        });
-
-
+        // Detect resizing events on the pimon-gauges div using Mark J. Schmidt's great 
+        // CSS-Elements-Queries library (without this resize events are only fired on the 
+        // window object) -> https://github.com/marcj/css-element-queries.
+        // If the size of the guage container div drops too small then  make the guages 
+        // render smaller as well.
+        // Note the timer is used so that we can trap the "end" of the resizing and ignore
+        // the continual resize events that a fired while the user is moving things.
         var timer = false;
         new ResizeSensor($(".pimon-gauges"), function() {
             if ($(".pimon-gauges").width() < 680) {
                 $(".js-guage").width("150px");
                 $(".js-guage").height("120px");
                 $(".container-gauges").removeClass("container-gauges").addClass("container-gauges-small");  //width("460px");
-                //$(".js-guage").css('display', 'block');
-                //$(".js-guage").css('display', 'inline-block');
-                //$("#tab-iflow-guages").css("display", "block");
                 if (timer !== false) {
                     clearTimeout(timer);
                 }
@@ -164,9 +137,6 @@
                 $(".js-guage").width("200px");
                 $(".js-guage").height("160px");
                 $(".container-gauges-small").removeClass("container-gauges-small").addClass("container-gauges"); //width("610px");
-                //$(".js-guage").css('display', 'block');
-                //$(".js-guage").css('display', 'inline-block');
-                //$("#tab-iflow-guages").css("display", "block");
                 if (timer !== false) {
                     clearTimeout(timer);
                 }
@@ -175,18 +145,21 @@
         });
 
 
+        // Start an interval timer to auto-refresh the display
         setInterval(function() {
             getStats();
         }, 300000);   //5mins
 
 
-        // force a refresh
+        // Refresh button click - force a refresh
         $("#refresh_btn").click(function() {
             getStats();
         });
 
 
-
+        /*
+        Use flotcharts (http://www.flotcharts.org/) to build a chart of message histories
+        */
         var d1 = [];
         for (var i = 0; i < 14; i += 0.5) {
             d1.push([i, Math.sin(i)]);

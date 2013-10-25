@@ -73,19 +73,12 @@
             <li>
               <a id="refresh_btn" href="#">
                 <span class="glyphicon glyphicon-refresh"></span> refresh
-              </a> <!--
-              <button type="button" id="refresh_btn" class="btn btn-default">
-                <span class="glyphicon glyphicon-refresh"></span> refresh
-              </button> -->
+              </a>
             </li>
             <li>
               <a href="#" class="js-settings-btn">
                 <span class="glyphicon glyphicon-wrench"></span>
               </a>
-              <!--
-              <button type="button" class="btn btn-default js-settings-btn">
-                <span class="glyphicon glyphicon-wrench"></span>
-              </button> -->
             </li>
           </ul>
         </div><!--/.nav-collapse -->
@@ -194,6 +187,19 @@
                 <div class="form-group">
                   <label for="serverERPSetting">associated ERP server (for launching sxmb_moni):</label>
                   <input type="text" class="form-control" id="serverERPSetting" placeholder="http://app-saperd.inpex.com.au:8002">
+                </div>
+
+                <!-- developer fields -->
+                <div class="pimon-developer">
+                  <br><br><hr>
+                  <div class="form-group">
+                    <label for="serverERPSetting">developer username:</label>
+                    <input type="text" class="form-control" id="developerUsername" placeholder="username">
+                  </div>
+                    <div class="form-group">
+                    <label for="serverERPSetting">developer password:</label>
+                    <input type="password" class="form-control" id="developerPassword" placeholder="password">
+                  </div>
                 </div>
               </form>
 

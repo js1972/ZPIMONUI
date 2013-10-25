@@ -82,6 +82,8 @@
         global.pimon_config.server = global.localStorage.server || "http://app1poy.inpex.com.au:58000";  //with default as POY
         global.pimon_config.server_client = global.localStorage.server_client || "030";
         global.pimon_config.erp_server = global.localStorage.erp_server || "http://app-saperd.inpex.com.au:8002";
+        global.pimon_config.dev_user = global.localStorage.dev_user || "";
+        global.pimon_config.dev_pass = global.localStorage.dev_pass || "";
 
         if (global.pimon_config.server === "") {
             $("#js-alert-connection").show(500);
@@ -89,21 +91,28 @@
     }
 
     /* Save the settings modal dialog value into localStorage */
-    function saveSettings(server, server_client, erp_server) {
+    function saveSettings(server, server_client, erp_server, dev_user, dev_pass) {
         global.pimon_config.server = server;
         global.pimon_config.server_client = server_client;
         global.pimon_config.erp_server = erp_server;
+        global.pimon_config.dev_user = dev_user;
+        global.pimon_config.dev_pass = dev_pass;
 
         global.localStorage.server = server;
         global.localStorage.server_client = server_client;
         global.localStorage.erp_server = erp_server;
+        global.localStorage.dev_user = dev_user;
+        global.localStorage.dev_pass = dev_pass;
     }
 
     function updateNavbarNotifications() {
         $.ajax({
             type: "GET",
             url: global.pimon_config.server + "/zpimon/api/stats/monthly",
-            dataType: "json"
+            dataType: "json",
+            beforeSend: function(xhr) {
+                ajaxBeforeSend(xhr);
+            }
         })
         .done(function(data) {
            $(".pimon-error-num").text(data.iflowOutstandingErrors);
@@ -124,11 +133,10 @@
     function cancelMessage(msgId, $td) {
         $.ajax({
             type: "POST",
-            url: global.pimon_config.server + "/zpimon/api/iflows/messages/" + msgId + "/cancel/"
-            //data: { "sap-client": global.pimon_config.server_client, "msgkey": msgKey },
-            //xhrFields: {
-            //    withCredentials: true
-            //}
+            url: global.pimon_config.server + "/zpimon/api/iflows/messages/" + msgId + "/cancel/",
+            beforeSend: function(xhr) {
+                ajaxBeforeSend(xhr);
+            }
         })
         .done(function(data, textStatus, jqXHR) {
             if (jqXHR.status == 200) {
@@ -156,11 +164,10 @@
     function resendMessage(msgId, $td) {
         $.ajax({
             type: "POST",
-            url: global.pimon_config.server + "/zpimon/api/iflows/messages/" + msgId + "/resend/"
-            //data: { "sap-client": global.pimon_config.server_client, "msgkey": msgKey },
-            //xhrFields: {
-            //    withCredentials: true
-            //}
+            url: global.pimon_config.server + "/zpimon/api/iflows/messages/" + msgId + "/resend/",
+            beforeSend: function(xhr) {
+                ajaxBeforeSend(xhr);
+            }
         })
         .done(function(data, textStatus, jqXHR) {
             if (jqXHR.status == 200) {
@@ -189,15 +196,13 @@
             //url: global.pimon_config.server + "/sap/bc/zpipersistmsgs",
             url: global.pimon_config.server + "/zpimon/api/update",
             data: { "sap-client": global.pimon_config.server_client },
-            beforeSend: function() {
+            beforeSend: function(xhr) {
                 $.blockUI({ message: null });
+                ajaxBeforeSend(xhr);
             },
             complete: function() {
                 $.unblockUI();
             }
-            //xhrFields: {
-            //   withCredentials: true
-            //}
         })
         .done(function() {
             getIflows($(".selectpicker").val());
@@ -228,13 +233,11 @@
 
         $.ajax({
             type: "GET",
-            //url: global.pimon_config.server + "/sap/bc/zpigetmsglog",
             url: global.pimon_config.server + "/zpimon/api/iflows/messages/" + msgId + "/log/",
-            //data: { "sap-client": global.pimon_config.server_client, "msgkey": msgKey },
-            dataType: "json"
-            //xhrFields: {
-            //    withCredentials: true
-            //}
+            dataType: "json",
+            beforeSend: function(xhr) {
+                ajaxBeforeSend(xhr);
+            }
         })
         .done(function (data) {
             var logTable = $("<table></table>").addClass("table status_log_table");
@@ -270,13 +273,11 @@
     function getPayload(msgId, msgKey, erpFlag) {
         $.ajax({
             type: "GET",
-            //url: global.pimon_config.server + "/sap/bc/zpigetmsgs",
             url: global.pimon_config.server + "/zpimon/api/iflows/messages/" + msgId + "/payload/",
-            //data: { "sap-client": global.pimon_config.server_client, "p": msgId, "erp": erpFlag },
-            dataType: "xml"
-            //xhrFields: {
-            //    withCredentials: true
-            //}
+            dataType: "xml",
+            beforeSend: function(xhr) {
+                ajaxBeforeSend(xhr);
+            }
         })
         .done(function(xml, textStatus, jqXHR) {
             /* Large payloads take a very long time to render - check */
@@ -339,13 +340,11 @@
 
             $.ajax({
                 type: "GET",
-                //url: global.pimon_config.server + "/sap/bc/zpigetmsgs",
                 url: global.pimon_config.server + "/zpimon/api/iflows/" + refId + "/messages/",
-                //data: { "sap-client": global.pimon_config.server_client, "r": refId },
-                dataType: "json"
-                //xhrFields: {
-                //   withCredentials: true
-                //}
+                dataType: "json",
+                beforeSend: function(xhr) {
+                    ajaxBeforeSend(xhr);
+                }
             })
             .done(function(data) {
                 //add an extra row with one cell - insert a new table within
@@ -434,6 +433,14 @@
         }
     }
 
+    function ajaxBeforeSend(xhr) {
+        if (global.location.href.indexOf("localhost") > -1) {
+            //xhr.setRequestHeader("Authorization", "Basic " + btoa("jscott:sophie07"));
+            xhr.setRequestHeader("Authorization", "Basic " + btoa(global.pimon_config.dev_user + ":" + global.pimon_config.dev_pass));
+            xhr.withCredentials = true;
+        }
+    }
+
     /*
     Call ICF service zpigetmsgsand to get all iFlows for the chose timeframe
     */
@@ -444,7 +451,14 @@
         $.ajax({
             type: "GET",
             url: global.pimon_config.server + "/zpimon/api/iflows/" + timeframe,
-            dataType: "json"
+            dataType: "json",
+            beforeSend: function(xhr) {
+                ajaxBeforeSend(xhr);
+                //if (global.location.href.indexOf("localhost") > -1) {
+                //    xhr.setRequestHeader("Authorization", "Basic " + btoa("jscott:sophie07"));
+                //    xhr.withCredentials = true;
+                //}
+            }
         })
         .done(function(data) {
             //build table of iflows and position at msgs_container
@@ -551,7 +565,9 @@
         global.pimon_config = {
             server: "",
             server_client: "",
-            erp_server: ""
+            erp_server: "",
+            dev_user: "",
+            dev_pass: ""
         };
 
         /* Hide any alerts when their cancel button is clicked */
@@ -601,7 +617,12 @@
 
         /* Handle the settings modal dialog SAVE button */
         $("#myModalSettings .modal-footer button").click(function() {
-            saveSettings($("#myModalSettings #serverSetting").val(), $("#myModalSettings #serverClientSetting").val(), $("#myModalSettings #serverERPSetting").val());
+            saveSettings($("#myModalSettings #serverSetting").val(),
+                         $("#myModalSettings #serverClientSetting").val(),
+                         $("#myModalSettings #serverERPSetting").val(),
+                         $("#myModalSettings #developerUsername").val(),
+                         $("#myModalSettings #developerPassword").val()
+            );
             $("#footerSettings").show(100).delay(2000).hide(100);
         });
     });
