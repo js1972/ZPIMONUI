@@ -10,7 +10,7 @@
         global.pimon_config.erp_server = global.localStorage.erp_server || "http://app-saperd.inpex.com.au:8002";
         global.pimon_config.dev_user = global.localStorage.dev_user || "";
         global.pimon_config.dev_pass = global.localStorage.dev_pass || "";
-        
+
         if (global.pimon_config.server === "") {
             $("#js-alert-connection").show(500);
         }
@@ -49,10 +49,25 @@
             //update the page block elements
             $(".pimon-error-alltime").text((data.errorsAllTime === undefined)? "" : data.errorsAllTime);
             $(".pimon-delivering-alltime").text((data.deliveringAllTime === undefined)? "" : data.deliveringAllTime);
-            //var words = $("<wbr></wbr>");
-            //words.text("not implemented");
-            //$(".pimon-blacklisted-alltime").html(words);
             $(".pimon-blacklisted-alltime").text("not implemented");
+
+            //Setup the FLOT CHART
+            //messageTimeSeries is a name: value pair of Dates (as long values) and integers (number of messages on that day).
+            var dps = [];
+            $.each(data.messageTimeSeries, function(longDate, msgCount) {
+                dps.push([longDate, msgCount]);
+            });
+            dps.sort(function(a, b) {
+                return b[0] - a[0];
+            });
+
+            //sample data format - simple mulit-dimensional array
+            //var d = [[1136070000000, 381.40], [1138748400000, 382.20], [1141167600000, 382.66], [1143842400000, 384.69], [1146434400000, 384.94], [1149112800000, 384.01], [1151704800000, 382.14], [1154383200000, 380.31], [1157061600000, 378.81], [1159653600000, 379.03], [1162335600000, 380.17], [1164927600000, 381.85], [1167606000000, 382.94], [1170284400000, 383.86], [1172703600000, 384.49], [1175378400000, 386.37], [1177970400000, 386.54], [1180648800000, 385.98], [1183240800000, 384.36], [1185919200000, 381.85], [1188597600000, 380.74], [1191189600000, 381.15], [1193871600000, 382.38], [1196463600000, 383.94], [1199142000000, 385.44]];
+
+            var placeholder = $(".pimon-chart");
+            var plot = $.plot(placeholder, [dps], {
+                xaxis: { mode: "time" }
+            });
         })
         .fail(function(jqXHR, textStatus, errorThrown) {
             $("#js-alert-ajax-text").text(errorThrown);
@@ -160,15 +175,15 @@
         /*
         Use flotcharts (http://www.flotcharts.org/) to build a chart of message histories
         */
-        var d1 = [];
-        for (var i = 0; i < 14; i += 0.5) {
-            d1.push([i, Math.sin(i)]);
-        }
+        //var d1 = [];
+        //for (var i = 0; i < 14; i += 0.5) {
+        //    d1.push([i, Math.sin(i)]);
+        //}
 
-        var d2 = [[0, 3], [4, 8], [8, 5], [9, 13]];
-        var d3 = [[0, 12], [7, 12], null, [7, 2.5], [12, 2.5]];
+        //var d2 = [[0, 3], [4, 8], [8, 5], [9, 13]];
+        //var d3 = [[0, 12], [7, 12], null, [7, 2.5], [12, 2.5]];
 
-        var placeholder = $(".pimon-chart");
-        var plot = $.plot(placeholder, [d1, d2, d3]);
+        //var placeholder = $(".pimon-chart");
+        //var plot = $.plot(placeholder, [dataPoints, dataPoints]); //d1, d2, d3]);
     });
 })(this, this.JustGage);
