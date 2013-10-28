@@ -127,6 +127,23 @@ module.exports = function(grunt) {
                   ]
               }]
           },
+          // This copy routine will copy all the files from the dist folder to my java project for deployment to server
+          to_java_project: {
+            files: [{
+              expand: true,
+              dot: true,
+              cwd: 'dist/',
+              dest: '../../../BPMworkspace.jdi/LocalDevelopment/ZPIMONSC/inpex.com.au/zpi_html/_comp/WebContent',
+              src: [
+                'css/{,*/}*.*',
+                'fonts/{,*/}*.*',
+                'img/{,*/}*.*',
+                'js/{,*/}*.*',
+                'index.html',
+                'stats.html'
+              ]
+            }]
+          }
       }
   });
 
@@ -148,4 +165,6 @@ module.exports = function(grunt) {
                                  'uglify',
                                  'copy:dist',
                                  'usemin' ]);
+
+  grunt.registerTask('javacopy', ['copy:to_java_project']);
 };

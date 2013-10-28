@@ -105,6 +105,52 @@
         global.localStorage.dev_pass = dev_pass;
     }
 
+    function setupNavBarTargetsAndHandlers() {
+        // refresh the display on the refresh button click based on currently selected period
+        $("#refresh_btn").click(function() {
+            getIflows($(".selectpicker").val());
+        });
+
+        $("#clear_cache_link").click(function() {
+            updateServer();
+        });
+
+        /* 
+        Setup the target link for opening up the standard message monitors.
+        The sap msgmonitor opens up t-code SXMB_MONI in the webgui. This works fine so long as you have the 'XML Tree'
+        Chrome plugin.
+        */
+        //The java message monitor does dodgy stuff with cross frame calls - so we get CORS issues listed in the console here... Still works though.
+        $("#pi_std_monitor").attr("href", global.pimon_config.server + "/webdynpro/resources/sap.com/tc~lm~itsam~ui~mainframe~wd/FloorPlanApp?applicationID=com.sap.itsam.mon.xi.msg");
+        $("#pi_std_monitor").attr("target", "_blank");
+
+        $("#pi_sxmb_moni").attr("href", global.pimon_config.erp_server + "/sap/bc/gui/sap/its/webgui?~transaction=sxmb_moni&sap-language=EN&sap-client=" + global.pimon_config.server_client);
+        $("#pi_sxmb_moni").attr("target", "_blank");
+
+        /* Handle the settings button by opening the settings modal dialog */
+        $(".js-settings-btn").click(function() {
+            $(".alert").hide(1000);     //hide any visible alerts
+
+            $("#myModalSettings").modal();
+            $("#myModalSettings #serverSetting").val(global.pimon_config.server); //pre-populate current value
+            $("#myModalSettings #serverClientSetting").val(global.pimon_config.server_client);
+            $("#myModalSettings #serverERPSetting").val(global.pimon_config.erp_server); //pre-populate current value
+            $("#myModalSettings #developerUsername").val(global.pimon_config.dev_user);
+            $("#myModalSettings #developerPassword").val(global.pimon_config.dev_pass);
+        });
+
+        /* Handle the settings modal dialog SAVE button */
+        $("#myModalSettings .modal-footer button").click(function() {
+            saveSettings($("#myModalSettings #serverSetting").val(),
+                         $("#myModalSettings #serverClientSetting").val(),
+                         $("#myModalSettings #serverERPSetting").val(),
+                         $("#myModalSettings #developerUsername").val(),
+                         $("#myModalSettings #developerPassword").val()
+            );
+            $("#footerSettings").show(100).delay(2000).hide(100);
+        });
+    }
+
     function updateNavbarNotifications() {
         $.ajax({
             type: "GET",
@@ -435,7 +481,6 @@
 
     function ajaxBeforeSend(xhr) {
         if (global.location.href.indexOf("localhost") > -1) {
-            //xhr.setRequestHeader("Authorization", "Basic " + btoa("jscott:sophie07"));
             xhr.setRequestHeader("Authorization", "Basic " + btoa(global.pimon_config.dev_user + ":" + global.pimon_config.dev_pass));
             xhr.withCredentials = true;
         }
@@ -454,10 +499,6 @@
             dataType: "json",
             beforeSend: function(xhr) {
                 ajaxBeforeSend(xhr);
-                //if (global.location.href.indexOf("localhost") > -1) {
-                //    xhr.setRequestHeader("Authorization", "Basic " + btoa("jscott:sophie07"));
-                //    xhr.withCredentials = true;
-                //}
             }
         })
         .done(function(data) {
@@ -583,47 +624,6 @@
         });
 
         getIflows("today");
-
-        // refresh the display on the refresh button click based on currently selected period
-        $("#refresh_btn").click(function() {
-            getIflows($(".selectpicker").val());
-        });
-
-        $("#clear_cache_link").click(function() {
-            updateServer();
-        });
-
-        /* 
-        Setup the target link for opening up the standard message monitors.
-        The sap msgmonitor opens up t-code SXMB_MONI in the webgui. This works fine so long as you have the 'XML Tree'
-        Chrome plugin.
-        */
-        //The java message monitor does dodgy stuff with cross frame calls - so we get CORS issues listed in the console here... Still works though.
-        $("#pi_std_monitor").attr("href", global.pimon_config.server + "/webdynpro/resources/sap.com/tc~lm~itsam~ui~mainframe~wd/FloorPlanApp?applicationID=com.sap.itsam.mon.xi.msg");
-        $("#pi_std_monitor").attr("target", "_blank");
-
-        $("#pi_sxmb_moni").attr("href", global.pimon_config.erp_server + "/sap/bc/gui/sap/its/webgui?~transaction=sxmb_moni&sap-language=EN&sap-client=" + global.pimon_config.server_client);
-        $("#pi_sxmb_moni").attr("target", "_blank");
-
-        /* Handle the settings button by opening the settings modal dialog */
-        $(".js-settings-btn").click(function() {
-            $(".alert").hide(1000);     //hide any visible alerts
-
-            $("#myModalSettings").modal();
-            $("#myModalSettings #serverSetting").val(global.pimon_config.server); //pre-populate current value
-            $("#myModalSettings #serverClientSetting").val(global.pimon_config.server_client);
-            $("#myModalSettings #serverERPSetting").val(global.pimon_config.erp_server); //pre-populate current value
-        });
-
-        /* Handle the settings modal dialog SAVE button */
-        $("#myModalSettings .modal-footer button").click(function() {
-            saveSettings($("#myModalSettings #serverSetting").val(),
-                         $("#myModalSettings #serverClientSetting").val(),
-                         $("#myModalSettings #serverERPSetting").val(),
-                         $("#myModalSettings #developerUsername").val(),
-                         $("#myModalSettings #developerPassword").val()
-            );
-            $("#footerSettings").show(100).delay(2000).hide(100);
-        });
+        setupNavBarTargetsAndHandlers();
     });
 })(this, console, jQuery);
