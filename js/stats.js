@@ -76,7 +76,7 @@
         });
     }
 
-    function createGauge(id, title) {
+    function createGauge(id, title, colours) {
         return new JustGage({
             id: id,
             value: 0,
@@ -84,7 +84,7 @@
             max: 100,
             showMinMax: false,
             refreshAnimationType: "bounce",
-            levelColors: ["#00CC00"],
+            levelColors: colours,  //["#00CC00"],
             title: title,
             relativeGaugeSize: true
         });
@@ -124,12 +124,12 @@
 
         // Add the guages to the global window object so we can access them anywhere. Don't know
         // if this is the best way - Surely there is a nice asynchronous way... 
-        global.gaugeIflowPerDay = createGauge("gaugeIflowPerDay", "iFlows / Day");
-        global.gaugeIflowErrorsPerDay = createGauge("gaugeIflowErrorsPerDay", "iFlow Errors / Day");
-        global.gaugeIflowOutstandingErrorsPerDay = createGauge("gaugeIflowOutstandingErrorsPerDay", "iFlow Current Errors");
-        global.gaugeMessagePerDay = createGauge("gaugeMessagePerDay", "Messages / Day");
-        global.gaugeMessageErrorsPerDay = createGauge("gaugeMessageErrorsPerDay", "Errors / Day");
-        global.gaugeMessageOutstandingErrorsPerDay = createGauge("gaugeMessageOutstandingErrorsPerDay", "Current Errors");
+        global.gaugeIflowPerDay = createGauge("gaugeIflowPerDay", "iFlows / Day", ["#00CC00"]);
+        global.gaugeIflowErrorsPerDay = createGauge("gaugeIflowErrorsPerDay", "iFlow Errors / Day", ["#efad29"]);
+        global.gaugeIflowOutstandingErrorsPerDay = createGauge("gaugeIflowOutstandingErrorsPerDay", "iFlow Current Errors", ["#c95b5b"]);
+        global.gaugeMessagePerDay = createGauge("gaugeMessagePerDay", "Messages / Day", ["#00CC00"]);
+        global.gaugeMessageErrorsPerDay = createGauge("gaugeMessageErrorsPerDay", "Errors / Day", ["#efad29"]);
+        global.gaugeMessageOutstandingErrorsPerDay = createGauge("gaugeMessageOutstandingErrorsPerDay", "Current Errors", ["#c95b5b"]);
 
         // Detect resizing events on the pimon-gauges div using Mark J. Schmidt's great 
         // CSS-Elements-Queries library (without this resize events are only fired on the 
