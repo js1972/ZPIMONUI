@@ -108,7 +108,7 @@
     function setupNavBarTargetsAndHandlers() {
         // refresh the display on the refresh button click based on currently selected period
         $("#refresh_btn").click(function() {
-            getIflows($(".selectpicker").val());
+            getIflows($(".selectpicker").val(), false);
         });
 
         $("#clear_cache_link").click(function() {
@@ -161,12 +161,17 @@
             }
         })
         .done(function(data) {
-           $(".pimon-error-num").text(data.iflowOutstandingErrors);
+            $(".pimon-error-num").text(data.iflowOutstandingErrors);
 
-           $(".pimon-notifications li :not(.dropdown-header)").remove();
-           $(".pimon-notifications").append(
-                $("<li></li>").append("<a href='javascript:;' tabindex='-1' role='menuitem'>View outstanding errors</a>")
+            $(".pimon-notifications li :not(.dropdown-header)").remove();
+            $(".pimon-notifications").append(
+                $("<li></li>").append("<a id='pimon-notification-error-link' href='javascript:;' tabindex='-1' role='menuitem'>View outstanding errors</a>")
             );
+
+            $("#pimon-notification-error-link").click(function() {
+                getIflows("year", true);
+                //global.alert("not implemented");
+            });
         })
         .fail(function(jqXHR, textStatus, errorThrown) {
             console.log("Error reading error stats (rest call: /zpimon/api/stats/monthly): " + errorThrown);
@@ -251,7 +256,7 @@
             }
         })
         .done(function() {
-            getIflows($(".selectpicker").val());
+            getIflows($(".selectpicker").val(), false);
             /* note: delay() only works with animations so must enter a fade in and out for show/hide or it wont work! */
             $("#footer").show(100).delay(2000).hide(100);
         })
@@ -261,7 +266,7 @@
             Tell user to wait...
             */
             if (errorThrown == "Instance already exists") {
-                getIflows($(".selectpicker").val());
+                getIflows($(".selectpicker").val(), false);
                 $("#footerAlreadyRunning").show(100).delay(2000).hide(100);
             } else {  /* Real error... */
                 $("#js-alert-ajax-text").text(errorThrown);
@@ -487,15 +492,23 @@
     }
 
     /*
-    Call ICF service zpigetmsgsand to get all iFlows for the chose timeframe
+    Get all iFlows for the chosen timeframe
     */
-    function getIflows(timeframe) {
+    function getIflows(timeframe, errorsOnly) {
+        var url;
+
         //remove any previous table data
         $("#msgs_container").empty();
 
+        if (errorsOnly) {
+            url = global.pimon_config.server + "/zpimon/api/iflows/" + timeframe + "?errors=X";
+        } else {
+            url = global.pimon_config.server + "/zpimon/api/iflows/" + timeframe;
+        }
+
         $.ajax({
             type: "GET",
-            url: global.pimon_config.server + "/zpimon/api/iflows/" + timeframe,
+            url: url,
             dataType: "json",
             beforeSend: function(xhr) {
                 ajaxBeforeSend(xhr);
@@ -620,10 +633,10 @@
 
         //enable Bootstrap-Select (http://caseyjhol.github.io/bootstrap-select/)
         $(".selectpicker").selectpicker().change(function() {
-            getIflows(this.value);
+            getIflows(this.value, false);
         });
 
-        getIflows("today");
+        getIflows("today", false);
         setupNavBarTargetsAndHandlers();
     });
 })(this, console, jQuery);

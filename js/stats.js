@@ -120,7 +120,7 @@
         We want to use AJAX to read the persisted message data here and build up the below data structure. Allow
         for different scales dynamically.
         */
-        getStats();
+        //getStats();
 
         // Add the guages to the global window object so we can access them anywhere. Don't know
         // if this is the best way - Surely there is a nice asynchronous way... 
@@ -131,6 +131,8 @@
         global.gaugeMessageErrorsPerDay = createGauge("gaugeMessageErrorsPerDay", "Errors / Day", ["#efad29"]);
         global.gaugeMessageOutstandingErrorsPerDay = createGauge("gaugeMessageOutstandingErrorsPerDay", "Current Errors", ["#c95b5b"]);
 
+        getStats();
+        
         // Detect resizing events on the pimon-gauges div using Mark J. Schmidt's great 
         // CSS-Elements-Queries library (without this resize events are only fired on the 
         // window object) -> https://github.com/marcj/css-element-queries.
