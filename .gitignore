@@ -1,5 +1,5 @@
-#node_modules -> lets include these for now - that way we have ALL the dependancies
-dist
+#node_modules -> lets include these for now - that way we have ALL the dependencies
+/dist
 .tmp
 .sass-cache
 app/bower_components
