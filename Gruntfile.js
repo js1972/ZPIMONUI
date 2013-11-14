@@ -1,9 +1,15 @@
+/*
+* If you encounter issues with the javacopy command ensure a 'grunt-config.json' file (not tracked by git) exists in the 
+* same folder as this file and has the following JSON structure: {"nwds":{"workspace":{"rootpath": "c:/MyScratchFolder/BPMworkspace.jdi"}}}
+* change the rootpath value to align with your own NWDS JDI workspace location (the one with the .jdi
+*/
+
 module.exports = function(grunt) {
     // load all grunt tasks
-    // requires load-grunt-tasks to be instealled (npm install load-grunt-tasks)
+    // requires load-grunt-tasks to be installed (npm install load-grunt-tasks)
     require('load-grunt-tasks')(grunt);
-
   grunt.initConfig({
+    customcfg: grunt.file.readJSON('grunt-config.json'), /*NOT TRACKED BY GIT - SEE HEADER NOTE */
     pkg: grunt.file.readJSON('package.json'),
 
     clean: ['dist'],
@@ -133,7 +139,7 @@ module.exports = function(grunt) {
               expand: true,
               dot: true,
               cwd: 'dist/',
-              dest: '../../../BPMworkspace.jdi/LocalDevelopment/ZPIMONSC/inpex.com.au/zpi_html/_comp/WebContent',
+			  dest: '<%= customcfg.nwds.workspace.rootpath %>' + '/LocalDevelopment/ZPIMONSC/inpex.com.au/zpi_html/_comp/WebContent',
               src: [
                 'css/{,*/}*.*',
                 'fonts/{,*/}*.*',
@@ -165,6 +171,10 @@ module.exports = function(grunt) {
                                  'uglify',
                                  'copy:dist',
                                  'usemin' ]);
-
-  grunt.registerTask('javacopy', ['copy:to_java_project']);
+								 
+  grunt.registerTask('javacopy', 'Copies DIST files to NWDS workspace', function() {
+	var cfg = grunt.config.get('customcfg.nwds.workspace.rootpath');
+	grunt.log.writeln('Copying dist to NWDS workspace at: ' + cfg);
+	grunt.task.run('copy:to_java_project');
+  });
 };
