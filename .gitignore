@@ -1,5 +1,8 @@
-#node_modules -> lets include these for now - that way we have ALL the dependancies
-dist
+#This file is developer specific
+grunt-pimon-config.json
+
+#node_modules -> lets include these for now - that way we have ALL the dependencies
+/dist
 .tmp
 .sass-cache
 app/bower_components
