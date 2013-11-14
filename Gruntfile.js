@@ -1,5 +1,5 @@
 /*
-* If you encounter issues with the javacopy command ensure a 'grunt-config.json' file (not tracked by git) exists in the 
+* If you encounter issues with the javacopy command ensure a 'grunt-pimon-config.json' file (not tracked by git) exists in the 
 * same folder as this file and has the following JSON structure: {"nwds":{"workspace":{"rootpath": "c:/MyScratchFolder/BPMworkspace.jdi"}}}
 * change the rootpath value to align with your own NWDS JDI workspace location (the one with the .jdi
 */
@@ -9,7 +9,7 @@ module.exports = function(grunt) {
     // requires load-grunt-tasks to be installed (npm install load-grunt-tasks)
     require('load-grunt-tasks')(grunt);
   grunt.initConfig({
-    customcfg: grunt.file.readJSON('grunt-config.json'), /*NOT TRACKED BY GIT - SEE HEADER NOTE */
+    customcfg: grunt.file.readJSON('grunt-pimon-config.json'), /*NOT TRACKED BY GIT - SEE HEADER NOTE */
     pkg: grunt.file.readJSON('package.json'),
 
     clean: ['dist'],
