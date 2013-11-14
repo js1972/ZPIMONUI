@@ -51,8 +51,9 @@
             $(".pimon-delivering-alltime").text((data.deliveringAllTime === undefined)? "" : data.deliveringAllTime);
             $(".pimon-blacklisted-alltime").text("not implemented");
 
-            //Setup the FLOT CHART
-            //messageTimeSeries is a name: value pair of Dates (as long values) and integers (number of messages on that day).
+            // Setup the FLOT CHART
+            // messageTimeSeries is a "name:value" pair of Dates (as long values) and integers (number of messages on that day).
+            // i.e. a Histogram of messages.
             var dps = [];
             $.each(data.messageTimeSeries, function(longDate, msgCount) {
                 dps.push([longDate, msgCount]);
