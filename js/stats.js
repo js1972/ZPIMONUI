@@ -1,6 +1,13 @@
 (function(global, JustGage) {
     'use strict';
 
+    var flotLegendSettings = {
+        updateFlotChartLegendTimeout: null,
+        latestPosition: null
+    };
+
+    var globalPlot;
+
     /*
     Read the server config settings from local storage: if no values then show a bootstrap alert.
     */
@@ -20,6 +27,55 @@
         if (global.location.href.indexOf("localhost") > -1) {
             xhr.setRequestHeader("Authorization", "Basic " + btoa(global.pimon_config.dev_user + ":" + global.pimon_config.dev_pass));
             xhr.withCredentials = true;
+        }
+    }
+
+    function flotChartDataSeriesComparator(a, b) {
+        return a[0] - b[0];
+    }
+
+    function updateFlotChartLegend(flotPlot) {
+        flotLegendSettings.updateFlotChartLegendTimeout = null;
+
+        var pos = flotLegendSettings.latestPosition;
+
+        var axes = flotPlot.getAxes();
+        if (pos.x < axes.xaxis.min || pos.x > axes.xaxis.max ||
+            pos.y < axes.yaxis.min || pos.y > axes.yaxis.max) {
+            return;
+        }
+
+        var i, j, dataset = flotPlot.getData();
+        for (i = 0; i < dataset.length; ++i) {
+            var series = dataset[i];
+
+            // time series data seems to be stored by flot in reverse - swap it here
+            series.data.sort(flotChartDataSeriesComparator);
+
+            // Find the nearest points, x-wise
+            for (j = 0; j < series.data.length; ++j) {
+                if (series.data[j][0] > pos.x) {
+                    break;
+                }
+            }
+
+            // Now Interpolate
+            var y,
+                p1 = series.data[j - 1],
+                p2 = series.data[j];
+
+            if (p1 === null) {
+                y = p2[1];
+            } else if (p2 === null) {
+                y = p1[1];
+            } else {
+                y = p1[1] + (p2[1] - p1[1]) * (pos.x - p1[0]) / (p2[0] - p1[0]);
+            }
+
+            // find the flot chart legends and update
+            var legends = $(".legendLabel");
+            //legends.eq(i).text(series.label.replace(/:.*/, ": " + y.toFixed(0)));
+            legends.eq(i).text(series.label + ": " + y.toFixed(0));
         }
     }
 
@@ -66,8 +122,19 @@
             //var d = [[1136070000000, 381.40], [1138748400000, 382.20], [1141167600000, 382.66], [1143842400000, 384.69], [1146434400000, 384.94], [1149112800000, 384.01], [1151704800000, 382.14], [1154383200000, 380.31], [1157061600000, 378.81], [1159653600000, 379.03], [1162335600000, 380.17], [1164927600000, 381.85], [1167606000000, 382.94], [1170284400000, 383.86], [1172703600000, 384.49], [1175378400000, 386.37], [1177970400000, 386.54], [1180648800000, 385.98], [1183240800000, 384.36], [1185919200000, 381.85], [1188597600000, 380.74], [1191189600000, 381.15], [1193871600000, 382.38], [1196463600000, 383.94], [1199142000000, 385.44]];
 
             var placeholder = $(".pimon-chart");
-            var plot = $.plot(placeholder, [dps], {
-                xaxis: { mode: "time" }
+            var plot = $.plot(placeholder, [ { data: dps, label: "msgs/day" } ], {
+                xaxis: { mode: "time" },
+                crosshair: { mode: "x" },
+                grid: { hoverable: true, autoHighlight: true },
+                legend: { show: true, container: $("#pimon-chart-legend") }
+            });
+            globalPlot = plot;
+
+            $(".pimon-chart").bind("plothover",  function (event, pos, item) {
+                flotLegendSettings.latestPosition = pos;
+                if (!flotLegendSettings.updateFlotChartLegendTimeout) {
+                    flotLegendSettings.updateFlotChartLegendTimeout = global.setTimeout(updateFlotChartLegend, 500, plot); //, legends);
+                }
             });
         })
         .fail(function(jqXHR, textStatus, errorThrown) {
@@ -94,7 +161,7 @@
     /*
     This function is called at the end of window re-sizing (actually at the end of the 
     pimon-gauges div resizing).
-    There is a strange bug that causes the guages graphic not to draw after a resize - 
+    There is a strange bug that causes the gauges graphic not to draw after a resize - 
     but only due to the gauges residing inside a bootstrap tab pane (or carousel) - and
     only after that tabs have been clicked!
     To get around this we use a timer to make it async and quickly click the tabs.
