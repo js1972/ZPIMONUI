@@ -74,7 +74,6 @@
 
             // find the flot chart legends and update
             var legends = $(".legendLabel");
-            //legends.eq(i).text(series.label.replace(/:.*/, ": " + y.toFixed(0)));
             legends.eq(i).text(series.label + ": " + y.toFixed(0));
         }
     }
@@ -124,7 +123,7 @@
             var placeholder = $(".pimon-chart");
             var plot = $.plot(placeholder, [ { data: dps, label: "msgs/day" } ], {
                 xaxis: { mode: "time" },
-                crosshair: { mode: "x" },
+                crosshair: { mode: "x", lineWidth: 2 },
                 grid: { hoverable: true, autoHighlight: true },
                 legend: { show: true, container: $("#pimon-chart-legend") }
             });
@@ -133,8 +132,17 @@
             $(".pimon-chart").bind("plothover",  function (event, pos, item) {
                 flotLegendSettings.latestPosition = pos;
                 if (!flotLegendSettings.updateFlotChartLegendTimeout) {
-                    flotLegendSettings.updateFlotChartLegendTimeout = global.setTimeout(updateFlotChartLegend, 500, plot); //, legends);
+                    flotLegendSettings.updateFlotChartLegendTimeout = global.setTimeout(updateFlotChartLegend, 500, plot);
                 }
+            });
+
+            // remove the legend mesage count when the mouse leave the chart
+            placeholder.mouseleave(function() {
+                global.setTimeout(function() {
+                    $(".legendLabel").each(function() {
+                        $(this).text($(this).text().split(":")[0]);
+                    });
+                }, 1000);
             });
         })
         .fail(function(jqXHR, textStatus, errorThrown) {
