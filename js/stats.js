@@ -6,8 +6,6 @@
         latestPosition: null
     };
 
-    var globalPlot;
-
     /*
     Read the server config settings from local storage: if no values then show a bootstrap alert.
     */
@@ -124,10 +122,9 @@
             var plot = $.plot(placeholder, [ { data: dps, label: "msgs/day" } ], {
                 xaxis: { mode: "time" },
                 crosshair: { mode: "x", lineWidth: 2 },
-                grid: { hoverable: true, autoHighlight: true },
-                legend: { show: true, container: $("#pimon-chart-legend") }
+                grid: { hoverable: true, autoHighlight: true }  //,
+                //legend: { show: true, container: $("#pimon-chart-legend") } //this sets up the legend into out own container element fi we want to use it
             });
-            globalPlot = plot;
 
             $(".pimon-chart").bind("plothover",  function (event, pos, item) {
                 flotLegendSettings.latestPosition = pos;
