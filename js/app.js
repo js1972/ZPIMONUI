@@ -79,7 +79,17 @@
     Read the server config settings from local storage: if no values then show a bootstrap alert.
     */
     function readServerSettings() {
-        global.pimon_config.server = global.localStorage.server || "http://app1poy.inpex.com.au:58000";  //with default as POY
+        if(global.localStorage.server !== undefined) {
+          //User has explicitly set the PI server via settings so use this
+          global.pimon_config.server = global.localStorage.server;
+        }else {
+          if(window.location.hostname !== "localhost") {
+            global.pimon_config.server = window.location.protocol + "//" + window.location.hostname + ":" + window.location.port;
+          } else {
+            //running from local host so default to the prototype system
+            global.pimon_config.server = "http://app1poy.inpex.com.au:58000";
+          }
+        }
         global.pimon_config.server_client = global.localStorage.server_client || "030";
         global.pimon_config.erp_server = global.localStorage.erp_server || "http://app-saperd.inpex.com.au:8002";
         global.pimon_config.dev_user = global.localStorage.dev_user || "";
