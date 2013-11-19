@@ -505,6 +505,10 @@
         } else {
             url = global.pimon_config.server + "/zpimon/api/iflows/" + timeframe;
         }
+        
+        if(timeframe === "others") {
+          url += "?from=" + getDatePickerVal("customPeriodDateFrom").format("YYYY-MM-DD") + "&to=" + getDatePickerVal("customPeriodDateTo").format("YYYY-MM-DD");
+        }
 
         $.ajax({
             type: "GET",
@@ -611,6 +615,36 @@
             $("#js-alert-ajax").show(500);
         });
     }
+    
+    //NOTE: This returs a Moment (momentjs.com) object, not a standard date object
+    function getDatePickerVal(datePicker) {
+      var moment = $("#"+datePicker).data("DateTimePicker").getDate();
+      if(moment !== null && moment.isValid()) {
+        return moment;  
+      } else {
+        return null;
+      }
+    }
+    
+    function validateDates () {
+      var dateFrom = getDatePickerVal("customPeriodDateFrom");
+      var dateTo = getDatePickerVal("customPeriodDateTo");
+      var validSelection = false;
+      
+      if(dateFrom !== null && dateTo !== null) {
+        //Can be equal as just dates, rest layer converts dateFrom to 00:00:00 and dateTo to 23:59:59
+        if(dateFrom.unix() <= dateTo.unix()) {
+          validSelection = true;
+        }
+      }
+      
+      if(validSelection === true) {
+        $("#btnCustomDateSearch").removeAttr("disabled", "disabled");
+      }
+      else {
+        $("#btnCustomDateSearch").attr("disabled", "disabled");
+      }
+    }
 
     /*
     Entry point - on document ready
@@ -633,9 +667,32 @@
 
         //enable Bootstrap-Select (http://caseyjhol.github.io/bootstrap-select/)
         $(".selectpicker").selectpicker().change(function() {
-            getIflows(this.value, false);
+            if(this.value === "others") {
+              $("#customDates").show(300);
+              $("#msgs_container").empty();
+            } else {
+              $("#customDates").hide(300);
+              getIflows(this.value, false);
+            }            
         });
-
+        
+        //Add date pickers: https://github.com/Eonasdan/bootstrap-datetimepicker
+        $('.date').datetimepicker({
+          pickTime: false
+        });
+        
+        $(".date").on("change.dp",function (e) {
+          validateDates();
+        });
+        
+        $("#btnCustomDateSearch").click(function() {
+          getIflows($(".selectpicker").val(), false);
+        });
+        
+        //Initialise date pickers to null so they don't pass validation (else default to today)
+        $(".date").data("DateTimePicker").setValue();
+        validateDates();
+        
         getIflows("today", false);
         setupNavBarTargetsAndHandlers();
     });
