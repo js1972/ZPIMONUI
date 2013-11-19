@@ -263,6 +263,11 @@ h1 small {
   position: relative;
 }
 
+/* Flot chart Legend container - line up the right-side of the legend with the right-side of the chart */
+#pimon-chart-legend {
+  padding-right: 30px;
+}
+
 .container-gauges {
   margin-right: auto;
   margin-left: auto;

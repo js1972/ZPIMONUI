@@ -139,7 +139,7 @@ module.exports = function(grunt) {
               expand: true,
               dot: true,
               cwd: 'dist/',
-            dest: '<%= customcfg.nwds.workspace.rootpath %>' + '/LocalDevelopment/ZPIMONSC/inpex.com.au/zpi_html/_comp/WebContent',
+              dest: '<%= customcfg.nwds.workspace.rootpath %>' + '/LocalDevelopment/ZPIMONSC/inpex.com.au/zpi_html/_comp/WebContent',
               src: [
                 'css/{,*/}*.*',
                 'fonts/{,*/}*.*',

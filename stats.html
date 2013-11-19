@@ -122,10 +122,19 @@
           <div class="row">
             <div class="col-sm-12">
               <div class="page-header">
-                <h3>Chart:</h3>
+                <h3>Succesful message history:</h3>
               </div>
             </div>
           </div>
+          <!-- specify a container for the flot chart legend - if we use the default flot chart legend
+               it does not work properly with the resize plugin -->
+          <!--
+          <div class="row">
+            <div class="col-sm-12">
+              <div id="pimon-chart-legend" class="pull-right"></div>
+            </div>
+          </div>
+          -->
           <div class="pimon-chart"></div>
         </div> <!-- end of col-sm-8 -->
       </div> <!-- end of row 2 -->
@@ -144,6 +153,7 @@
     <script src="js/jquery.flot.js"></script>
     <script src="js/jquery.flot.resize.js"></script>
     <script src="js/jquery.flot.time.js"></script>
+    <script src="js/jquery.flot.crosshair.js"></script>
     <script src="js/ResizeSensor.js"></script>
     <script src="js/ElementQueries.js"></script>
     <!-- main app js -->
