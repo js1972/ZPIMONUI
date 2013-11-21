@@ -27,6 +27,7 @@
     <link rel="stylesheet" href="css/theme.bootstrap.css">
     <link rel='stylesheet' href="css/prettify.css">
     <link rel="stylesheet" href="css/animate.css">
+    <link rel="stylesheet" href="css/bootstrap-datetimepicker.min.css">
     <!-- endbuild -->
   </head>
   <body>
@@ -98,21 +99,35 @@
       </div>
 
       <select class="selectpicker">
-        <option>last_hour</option>
-        <option selected>today</option>
-        <option>yesterday</option>
-        <option>week</option>
-        <option>last_week</option>
-        <option>month</option>
-        <option>year</option>
+        <option value="last_hour">last hour</option>
+        <option selected value="today">today</option>
+        <option value="yesterday">yesterday</option>
+        <option value="week">week</option>
+        <option value="last_week">last week</option>
+        <option value="month">month</option>
+        <option value="year">year</option>
         <option data-divider="true"></option>
-        <option>other</option>
+        <option value="others">other</option>
       </select>
       <!-- Display a badge for the number of displayed iFlows -->
       <span class="badge js-iflow-num"></span>
       <!-- Show button on right-hand side. reset class is used by tablesorter to clear the filters -->
       <button type="submit" class="btn btn-default btn-sm pull-right reset">Clear filters</button>
-
+      
+      <div id="customDates">
+        <div class="form-group">
+          <div class="input-group date" id="customPeriodDateFrom">
+            <input type="text" class="form-control" data-format="DD/MM/YYYY" placeholder="Date From"/>
+            <span class="input-group-addon"><span class="glyphicon glyphicon-calendar"></span>
+          </div>
+          <div class="input-group date" id="customPeriodDateTo">
+            <input type="text" class="form-control" data-format="DD/MM/YYYY" placeholder="Date To"/>
+            <span class="input-group-addon"><span class="glyphicon glyphicon-calendar"></span>
+          </div>
+            <button type="submit" id="btnCustomDateSearch" class="btn btn-primary">Search</button>
+        </div>
+      </div>
+      
     <!-- BANNER ALERTS -->
       <!-- Alert for no connection settings -->
       <div id="js-alert-connection" class="alert alert-block alert-danger fade in">
@@ -257,6 +272,9 @@
          Allows for user input blocking while still performing async ajax! -->
     <script src="js/jquery.blockUI.js"></script>
     <script src="js/jquery.bootstrap.prettyconfirm.js"></script>
+    <!-- Date time picker, moment is a dependency for the datetime picker -->
+    <script src="js/moment.min.js"></script>
+    <script src="js/bootstrap-datetimepicker.min.js"></script>
     <!-- endbuild -->
   </body>
 </html>

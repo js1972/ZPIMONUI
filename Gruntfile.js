@@ -5,9 +5,9 @@
 */
 
 module.exports = function(grunt) {
-    // load all grunt tasks
-    // requires load-grunt-tasks to be installed (npm install load-grunt-tasks)
-    require('load-grunt-tasks')(grunt);
+  // load all grunt tasks
+  // requires load-grunt-tasks to be installed (npm install load-grunt-tasks)
+  require('load-grunt-tasks')(grunt);
   grunt.initConfig({
     customcfg: grunt.file.readJSON('grunt-pimon-config.json'), /*NOT TRACKED BY GIT - SEE HEADER NOTE */
     pkg: grunt.file.readJSON('package.json'),
@@ -173,8 +173,8 @@ module.exports = function(grunt) {
                                  'usemin' ]);
 								 
   grunt.registerTask('javacopy', 'Copies DIST files to NWDS workspace', function() {
-	var cfg = grunt.config.get('customcfg.nwds.workspace.rootpath');
-	grunt.log.writeln('Copying dist to NWDS workspace at: ' + cfg);
-	grunt.task.run('copy:to_java_project');
+    var cfg = grunt.config.get('customcfg.nwds.workspace.rootpath');
+    grunt.log.writeln('Copying dist to NWDS workspace at: ' + cfg);
+    grunt.task.run('copy:to_java_project');
   });
 };

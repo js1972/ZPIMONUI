@@ -498,3 +498,17 @@ h1 small {
 .box .value.black {
   color:#444
 }
+
+/* Custom Date Search Stuff */
+#customDates {
+  clear: above;
+  padding-bottom: 10px;
+  padding-top: 4px;
+  display:none;
+}
+
+.date {
+  width: 220px;
+  float: left;
+  margin-right: 10px;
+}
