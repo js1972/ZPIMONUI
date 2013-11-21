@@ -146,7 +146,8 @@ module.exports = function(grunt) {
                 'img/{,*/}*.*',
                 'js/{,*/}*.*',
                 'index.html',
-                'stats.html'
+                'stats.html',
+                '404.html'
               ]
             }]
           }
