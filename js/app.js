@@ -335,12 +335,13 @@
         $.ajax({
             type: "GET",
             url: global.pimon_config.server + "/zpimon/api/iflows/messages/" + msgId + "/payload/",
-            dataType: "xml",
             beforeSend: function(xhr) {
                 ajaxBeforeSend(xhr);
             }
         })
         .done(function(xml, textStatus, jqXHR) {
+            var isXMLContent = jqXHR.getResponseHeader("content-type") === "application/xml";
+
             /* Large payloads take a very long time to render - check */
             if (jqXHR.responseText.length > 200000) {
                 if (global.confirm("Large payload over 200kB. Rendering will take some time... Continue (with no pretty print)?")) {
@@ -348,7 +349,12 @@
 
                     //Hack - we need a timeout here to give the browser time to render the blockUI call!
                     setTimeout(function() {
-                        $("#payload_div").text(formatXml(jqXHR.responseText));
+                        if (isXMLContent) {
+                            $("#payload_div").text(formatXml(jqXHR.responseText));
+                        }
+                        else {
+                            $("#payload_div").text(jqXHR.responseText);	
+                        }
                         $('#pimon-payload-modal').modal();
 
                         //************* DONT THINK MSGKEY IS NECESSARY ANY MORE **************
@@ -363,7 +369,11 @@
                     }, 1000);
                 }
             } else {
-                $("#payload_div").text(formatXml(jqXHR.responseText));
+                if (isXMLContent) {
+                    $("#payload_div").text(formatXml(jqXHR.responseText));
+                } else {
+                    $("#payload_div").text(jqXHR.responseText);
+                }
                 $("#pimon-payload-modal").modal();
 
                 //Hide the message key on the message details modal popup so it can be used
@@ -380,7 +390,9 @@
                 The prettyprint function is added to the global object
                 */
                 $("#payload_div").removeClass("prettyprinted");
-                global.prettyPrint();
+                if(isXMLContent) {
+                    global.prettyPrint();
+                }
             }
         })
         .fail(function(jqXHR, textStatus, errorThrown) {
