@@ -6,7 +6,7 @@
  * http://twbs.github.com/bootstrap/javascript.html
  * ======================================================================== */
 (function (global, console, $) {
-    'use strict';
+    "use strict";
 
     /* function to pad a number with leading zeroes */
     function pad(num, size) {
@@ -19,11 +19,13 @@
 
     /* 
     Format date time from a string - dateAsString is in Java format: "Oct 10, 2013 2:00:49 AM"
-
     */
     function formatTime(dateAsString) {
+        if (dateAsString === undefined || dateAsString === "") {
+            return "";
+        }
+
         var d = new Date(dateAsString);
-        //var d = new Date(ds.substring(0, 4), ds.substring(4, 6), ds.substring(6, 8), ds.substring(8, 10), ds.substring(10, 12), ds.substring(12, 14));
         var curr_date = pad(d.getDate(), 2);
         var curr_month = d.toString().split(" ")[1]; //pad(d.getMonth() + 1, 2);  //months are zero-based
         var curr_year = d.getFullYear();
@@ -401,10 +403,6 @@
         });
     }
 
-    /*
-    Call ICF service zpigetmsgsand to get all the messages
-    for the specified reference message id.
-    */
     function getMessages(refId, rowElement, toggle) {
         removeExistingPopinRows();
 
