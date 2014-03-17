@@ -29,8 +29,7 @@ Sample pics
 
 iFlow overview: ![image](https://f.cloud.github.com/assets/1317161/2434208/07695842-adad-11e3-89f9-ff695cd8e948.png)
 
-Messages contained in the selected iFlow:
-![Sample prettyConfirm dialog](https://bitbucket.org/jasonscott/pimon-web-app-source-files/raw/9ce1f7a580661c2a6bd5f0fb890f9b09e861a1eb/readme_pics/messages.PNG)
+Messages contained in the selected iFlow: ![image](https://f.cloud.github.com/assets/1317161/2434225/7a3b3502-adad-11e3-8447-3e654f572abd.png)
 
 Message payload:
 ![Sample prettyConfirm dialog](https://bitbucket.org/jasonscott/pimon-web-app-source-files/raw/9ce1f7a580661c2a6bd5f0fb890f9b09e861a1eb/readme_pics/payload.PNG)
