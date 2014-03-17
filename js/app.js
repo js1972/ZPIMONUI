@@ -390,7 +390,6 @@
             }
         })
         .fail(function(jqXHR, textStatus, errorThrown) {
-            alert("get payload failed");
             $("#js-alert-ajax-text").text(errorThrown);
             $("#js-alert-ajax").show(500);
         });
