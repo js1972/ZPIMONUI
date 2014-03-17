@@ -27,8 +27,7 @@ What does this pimon tool provide:
 Sample pics
 -----------
 
-Overview of today's iFlow's:
-![Sample prettyConfirm dialog](https://bitbucket.org/jasonscott/pimon-web-app-source-files/raw/17cf9e98eaad007bc866e362905020971bf9225d/readme_pics/iflows.PNG)
+iFlow overview: ![image](https://f.cloud.github.com/assets/1317161/2434191/a2cf6854-adac-11e3-9e45-3f0648fc01f6.png)
 
 Messages contained in the selected iFlow:
 ![Sample prettyConfirm dialog](https://bitbucket.org/jasonscott/pimon-web-app-source-files/raw/9ce1f7a580661c2a6bd5f0fb890f9b09e861a1eb/readme_pics/messages.PNG)
