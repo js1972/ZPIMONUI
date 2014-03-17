@@ -353,17 +353,12 @@
                     setTimeout(function() {
                         if (isXMLContent) {
                             $("#payload_div").text(formatXml(jqXHR.responseText));
-                        }
-                        else {
+                        } else {
                             $("#payload_div").text(jqXHR.responseText);	
                         }
                         $('#pimon-payload-modal').modal();
 
-                        //************* DONT THINK MSGKEY IS NECESSARY ANY MORE **************
-                        //Hide the message key on the message details modal popup so it can be used
-                        // by the code to retrieve the status log later on...
-                        //Also force the first tab to be shown.
-                        $("#pimon-payload-modal").attr("data-js-msgkey", msgKey);
+                        //force first tab to show
                         $("#modal-payload-tab-list a:first").tab("show");
                         getMessageLog(msgId);
 
@@ -378,10 +373,7 @@
                 }
                 $("#pimon-payload-modal").modal();
 
-                //Hide the message key on the message details modal popup so it can be used
-                // by the code to retrieve the status log later on...
-                //Also force the first tab to be shown.
-                $("#pimon-payload-modal").attr("data-js-msgkey", msgKey);
+                //force first tab to show
                 $("#modal-payload-tab-list a:first").tab("show");
                 getMessageLog(msgId);
 
@@ -398,6 +390,7 @@
             }
         })
         .fail(function(jqXHR, textStatus, errorThrown) {
+            alert("get payload failed");
             $("#js-alert-ajax-text").text(errorThrown);
             $("#js-alert-ajax").show(500);
         });
