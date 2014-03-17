@@ -263,6 +263,15 @@ h1 small {
   border-bottom: 1px solid #eeeeee;
 }
 
+.page-header h3 {
+  color: #999999;
+}
+
+.stats-tabs-header {
+  margin-top: 0;
+  color: #999999;
+}
+
 .pimon-chart {
   width: 100%;
   height: 300px;

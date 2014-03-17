@@ -177,7 +177,7 @@
 
             $(".pimon-notifications li :not(.dropdown-header)").remove();
             $(".pimon-notifications").append(
-                $("<li></li>").append("<a id='pimon-notification-error-link' href='javascript:;' tabindex='-1' role='menuitem'>View outstanding errors</a>")
+                $("<li></li>").append("<a id='pimon-notification-error-link' href='javascript:;' tabindex='-1' role='menuitem'>View <b>all</b> outstanding errors</a>")
             );
 
             $("#pimon-notification-error-link").click(function() {
