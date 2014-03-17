@@ -35,18 +35,17 @@ Message payload: ![image](https://f.cloud.github.com/assets/1317161/2434236/ba29
 
 Message status log: ![image](https://f.cloud.github.com/assets/1317161/2434248/f962c250-adad-11e3-98ba-564400b31e37.png)
 
-Some basic processing statistics: 
-![Sample prettyConfirm dialog](https://bitbucket.org/jasonscott/pimon-web-app-source-files/raw/9ce1f7a580661c2a6bd5f0fb890f9b09e861a1eb/readme_pics/stats.PNG)
+Some basic processing statistics: ![image](https://f.cloud.github.com/assets/1317161/2434266/4e15a5e2-adae-11e3-8ad7-395f82be9720.png)
 
 
-Grunt can now be used to build a production version of the app into the /dist folder.
+Grunt can be used to build a production version of the app into the /dist folder.
 
 
 How does it work?
 
 1) You require a NetWeaver PI-AEX system (7.31) as the Process Integration system to monitor
-2) We cache the PI messages in a Java Dictionary for fast access.
-3) The monitor app (index.html) is built using Bootstrap 3 and jQuery. It reads the cached messages and displays them grouped by iFlow.
-   You can drill-down into the iFlow with a click to see the messages it contains. A further drill-down brings up the payload and message log.
+2) We cache the PI messages in a Java Dictionary for fast access. See the ZPIMON repo for details
+3) The monitor app (index.html) is built using Bootstrap 3 and jQuery. It reads the cached messages and displays them grouped by iFlow
+   You can drill-down into the iFlow with a click to see the messages it contains. A further drill-down brings up the payload and message log
    Related iFlows are grouped together - such as the response iFlow's when using modules for async/sync bridging.
    
