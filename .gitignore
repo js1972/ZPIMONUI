@@ -1,7 +1,7 @@
 #This file is developer specific
 grunt-pimon-config.json
 
-#node_modules -> lets include these for now - that way we have ALL the dependencies
+/node_modules
 /dist
 .tmp
 .sass-cache
