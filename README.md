@@ -5,7 +5,7 @@ pimon is a Web app for monitoring SAP NetWeaver PI-AEX.
 
 *** This is a work in progress ***
 
-(See the ZPIMONSC repo for the dist version of this web app and the java backend as well.)
+(See the ZPIMON repo for the java backend to this app.)
 
 
 The current state of SAP PI-AEX monitoring tools is pretty poor. They use (what I believe to be a) clunky old-fashioned web-dynpro proprietory technology.
@@ -41,11 +41,21 @@ Some basic processing statistics: ![image](https://f.cloud.github.com/assets/131
 Grunt can be used to build a production version of the app into the /dist folder.
 
 
-How does it work?
+## How does it work ##
 
-1) You require a NetWeaver PI-AEX system (7.31) as the Process Integration system to monitor
-2) We cache the PI messages in a Java Dictionary for fast access. See the ZPIMON repo for details
-3) The monitor app (index.html) is built using Bootstrap 3 and jQuery. It reads the cached messages and displays them grouped by iFlow
-   You can drill-down into the iFlow with a click to see the messages it contains. A further drill-down brings up the payload and message log
-   Related iFlows are grouped together - such as the response iFlow's when using modules for async/sync bridging.
-   
+1. You require a NetWeaver PI-AEX system (7.31) as the Process Integration system to monitor
+2. We cache the PI messages in a Java Dictionary for fast access. See the ZPIMON repo for details
+3. The monitor app (index.html) is built using Bootstrap 3 and jQuery. It reads the cached messages and displays them grouped by iFlow
+4. You can drill-down into the iFlow with a click to see the messages it contains. A further drill-down brings up the payload and message log
+5. Related iFlows are grouped together - such as the response iFlow's when using modules for async/sync bridging.
+
+## Contributing ##
+
+1. Clone this repo to your local machine
+2. Make changes as necessary
+3. Run ```grunt``` to build a dist version of the app (in  /dist)
+4. You need to embed this app into the backend java project. To do so: clone the ZPIMON repo; create a grunt-pimon-config.json file (see below) which points to the location of your ZPIMON repo; then run ```grunt javacopy``` to copy the /dist app into the java project of PIMON.
+5. Build the PIMON repo in NWDS and deploy to your PI server.
+
+If you encounter issues with the javacopy command ensure a 'grunt-pimon-config.json' file (not tracked by git) exists in the same folder as the Gruntfile.js file and has the following JSON structure:
+```{"nwds":{"workspace":{"rootpath": "c:/MyScratchFolder/BPMworkspace.jdi"}}}``` change the rootpath value to align with your own NWDS JDI workspace location (the one with the .jdi).
