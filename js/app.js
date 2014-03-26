@@ -287,10 +287,37 @@
         });
     }
 
-    /*
-    Given the Message Key, read the message log and on success build a html table to
-    display the resultset.
-    */
+    /**
+     * GET message header details for the given msgId and populate the 
+     * header details form on the modal.
+     */
+    function getMessageHeaderDetails(msgId) {
+        $.ajax({
+            type: "GET",
+            url: global.pimon_config.server + "/zpimon/api/iflows/messages/" + msgId + "/info/",
+            dataType: "json",
+            beforeSend: function(xhr) {
+                ajaxBeforeSend(xhr);
+            }
+        })
+        .done(function (data) {
+            $("#inputMsgId").text(data.msgId);
+            $("#inputProcMode").text(data.mode);
+            $("#inputQoS").text(data.qos);
+            $("#inputQueueId").text(data.queueId);
+            $("#inputQueueSeq").text("*");
+            $("#inputSender").text(data.sender);
+            $("#inputReceiver").text(data.receiver);
+        })
+        .fail(function (jqXHR, textStatus, errorThrown) {
+            global.alert("something went wrong reading message info!");
+        });
+    }
+
+    /**
+     * Given the Message Key, read the message log and on success build a html table to
+     * display the resultset.
+     */
     function getMessageLog(msgId) {
         $("#modal-tab-log-table").empty();
 
@@ -330,10 +357,11 @@
         });
     }
 
-    /*
-    Get the message payload based on the message id
-    */
-    function getPayload(msgId, msgKey, erpFlag) {
+    /**
+     * Get the message payload based on the message id and display the 
+     * Message Details modal.
+     */
+    function getPayloadAndDisplayModal(msgId, msgKey, erpFlag) {
         $.ajax({
             type: "GET",
             url: global.pimon_config.server + "/zpimon/api/iflows/messages/" + msgId + "/payload/",
@@ -360,6 +388,7 @@
 
                         //force first tab to show
                         $("#modal-payload-tab-list a:first").tab("show");
+                        getMessageHeaderDetails(msgId);
                         getMessageLog(msgId);
 
                         $.unblockUI();
@@ -375,6 +404,7 @@
 
                 //force first tab to show
                 $("#modal-payload-tab-list a:first").tab("show");
+                getMessageHeaderDetails(msgId);
                 getMessageLog(msgId);
 
                 /* PrettyPrint adds this class to pre elements that have already
@@ -416,7 +446,7 @@
                 var responsiveDiv = $("<div></div>").addClass("table-responsive");
 
                 var popinTable = $("<table></table>").addClass("js-popin-table table table-condensed");
-                var header = $("<thead><tr><th> </th><th>status</th><th>start time</th><th>end time</th><th>sender system</th><th>sender interface</th><th>sender namespace</th><th></th></tr></thead>");
+                var header = $("<thead><tr><th> </th><th>status</th><th>start time</th><th>end time</th><th>sender system</th><th>interface</th><th>namespace</th><th></th></tr></thead>");
                 popinTable.append(header).append("<tbody>");
 
                 $.each(data, function(i, item){
@@ -464,7 +494,7 @@
 
                 //Enable the click on all row cell except the last one which only holds the 'action' dropdown for cancel and re-send!
                 $(".js-popin-table > tbody > tr td:not(:last-child)").click(function() {
-                    getPayload($(this).parent().attr("data-js-msg-id"), $(this).parent().attr("data-js-msg-key"), $(this).parent().attr("data-js-erp"));
+                    getPayloadAndDisplayModal($(this).parent().attr("data-js-msg-id"), $(this).parent().attr("data-js-msg-key"), $(this).parent().attr("data-js-erp"));
                 });
 
                 //Enable a confirm dialog on the dropdown links using my jquery.bootstrap.confirm plugin
